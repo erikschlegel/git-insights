@@ -1,0 +1,23 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "KeyvaultName": "<REQUIRED_VALUE>",
+    "PatSecretName": "<REQUIRED_VALUE>",
+    "AdoProjectName": "<REQUIRED_VALUE>",
+    "AdoOrgName": "<REQUIRED_VALUE>",
+    "AdoRepos": "<REQUIRED_VALUE>",
+    "BacklogTeamId": "<REQUIRED_VALUE>",
+    "AZURE_CLIENT_SECRET": "<REQUIRED_VALUE>",
+    "AZURE_TENANT_ID": "<REQUIRED_VALUE>",
+    "AZURE_CLIENT_ID": "<REQUIRED_VALUE>",
+    "AZURE_SUBSCRIPTION_ID": "<REQUIRED_VALUE>",
+    "AzureWebJobsStorage": "<Autofilled_By_Azure_Functions_Extension>",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "gitinsights_STORAGE": "<Autofilled_By_Azure_Functions_Extension>"
+  },
+  "Host": {
+    "LocalHttpPort": 7072,
+    "CORS": "*",
+    "CORSCredentials": false
+  }
+}
