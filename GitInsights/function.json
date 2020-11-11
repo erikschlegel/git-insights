@@ -1,0 +1,20 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "name": "mytimer",
+      "type": "timerTrigger",
+      "direction": "in",
+      "useMonitor": true,
+      "schedule": "0 */3 * * * *",
+      "runOnStartup": false
+    },
+    {
+      "type": "blob",
+      "direction": "out",
+      "name": "outputBlob",
+      "path": "outcontainer/{DateTime}.csv",
+      "connection": "gitinsights_STORAGE"
+    }
+  ]
+}
