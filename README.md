@@ -65,7 +65,6 @@ pip install git-insights
 - [Keyvault Resource](https://docs.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal#create-a-vault)
 - A [secret](https://docs.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal#add-a-secret-to-key-vault) containing the value of your PAT token.
 - [Service Principal](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal) with read level role assignments into the above Keyvault resource
-- [Keyvault Resource](https://docs.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal#create-a-vault)
 
 #### Steps
 1. Clone the repo
@@ -84,6 +83,7 @@ After signing in, verify that the status bar says Azure: Signed In and your subs
 ![](https://docs.microsoft.com/en-us/azure/developer/python/media/tutorial-vs-code-serverless-python/azure-account-status-bar.png)
 
 4. To verify that all the Azure Functions tools are installed, open the Visual Studio Code Command Palette (F1), select the Terminal: Create New Integrated Terminal command, and once the terminal opens, run the command `func`
+
 ![](https://docs.microsoft.com/en-us/azure/developer/python/media/tutorial-vs-code-serverless-python/check-azure-functions-tools-prerequisites-in-visual-studio-code.png)
 
 5. Configuration Setup
@@ -97,15 +97,38 @@ After signing in, verify that the status bar says Azure: Signed In and your subs
 
 7. The function will write the results to your blob storage account prior to completion.
 
+## SDK Usage
+
+### Example
+
+```python
+from git-insights import AzureDevopsInsights
+
+adoProject = "Seinfeld-Trivia"
+adoOrg = "Best-Shows"
+repos = ["Tales-of-Kramer"]
+teamId = "Team LD"
+patToken = "Kramers-secret"
+
+groupByColumns = ['contributor', 'week', 'repo']
+
+client = AzureDevopsInsights(adoOrg, adoProject, repos, teamId, aliasDict)
+dataframe = client.aggregatePullRequestActivity(groupByColumns, patToken)
+
+print(dataframe)
+```
+
 ## Backlog Features - will be migrated to repo backlog
 - Azure Functions Integration
   - Dockerize Azure Function
   - Add Azure Function Continuous Delivery Pipeline
   - Integrate with PowerBI
-  - Terraform integration to automate scaffolding of keyvault, azure function and blob storage resources 
+  - Terraform integration to automate scaffolding of keyvault, azure function and blob storage resources
 - Travis Continuous Integration pipeline
+  - Add support for module release publishing to pip registry
 - Add E2E Integration Tests
+- Add pre-commit hook to block pushes including creds
 - Add a new provider to support Git Lab integration
 - [Setuptools](https://setuptools.readthedocs.io/en/latest/setuptools.html) integration for building and distributing packages to pip
-- Integrate Sphinx to autogen SDK docs.
-- Integrate code style / linting tools like [_black_](https://github.com/psf/black).
+- Integrate [Sphinx](https://www.sphinx-doc.org/en/master/) to autogen SDK docs
+- Integrate code style / linting tools like [Black](https://github.com/psf/black).
