@@ -9,6 +9,7 @@ class RepoInsightsClient(abc.ABC):
     def __init__(self, organization: str, project: str, repos: [str], teamId: str, profileAliases: dict = None):
         if profileAliases is None:
             profileAliases = {}
+
         self.organization: str = organization
         self.project: str = project
         self.repos: [str] = repos
