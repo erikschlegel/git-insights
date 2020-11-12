@@ -18,8 +18,8 @@ def main(mytimer: func.TimerRequest, outputBlob: func.Out[func.InputStream]) -> 
     teamId = os.environ["BacklogTeamId"]
 
     # Optional settings
-    profileAliasOverrides = os.environ.get("ProfileAliases", "{}") # Accounts for local git profile setup discrepencies
-    aliasDict = json.loads(profileAliasOverrides.replace("\'", "\""))
+    # Accounts for local git profile setup discrepencies
+    aliasDict = json.loads(os.environ.get("ProfileAliases", "{}").replace("\'", "\""))
 
     groupByColumns = ['contributor', 'week', 'repo']
 
@@ -28,7 +28,7 @@ def main(mytimer: func.TimerRequest, outputBlob: func.Out[func.InputStream]) -> 
 
     kvURI = f"https://{keyVaultName}.vault.azure.net"
     patToken = KeyvaultClient(kvURI).getSecretValue(patSecretName)
-    
+
     utc_timestamp = datetime.datetime.utcnow().replace(
         tzinfo=datetime.timezone.utc).isoformat()
 

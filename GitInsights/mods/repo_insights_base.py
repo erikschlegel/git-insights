@@ -1,5 +1,4 @@
 import abc
-import logging
 import pandas as pd
 import requests
 
@@ -7,24 +6,40 @@ from dateutil import parser
 from requests.auth import HTTPBasicAuth
 
 class RepoInsightsClient(abc.ABC):
-    def __init__(self, organization: str, project: str, repos: [str], teamId: str, profileAliases: dict = {}):
+    def __init__(self, organization: str, project: str, repos: [str], teamId: str, profileAliases: dict = None):
+        if profileAliases is None:
+            profileAliases = {}
         self.organization: str = organization
         self.project: str = project
         self.repos: [str] = repos
         self.teamId: str = teamId
         self.profileIdentityAliases = profileAliases
+        self.commitChangeCounts = {}
 
         super().__init__()
 
     @staticmethod
     def dateStrDiffInDays(fromDate: str, toDate: str) -> float:
-        if fromDate and toDate:
-            fromDatetime = parser.parse(fromDate)
-            toDatetime = parser.parse(toDate)
+        if not fromDate or not toDate:
+            raise ValueError('From and To Date are required')
 
-            return (fromDatetime - toDatetime).days
+        fromDatetime = parser.parse(fromDate)
+        toDatetime = parser.parse(toDate)
+
+        return (fromDatetime - toDatetime).days
+
+    @staticmethod
+    def invokeAPICall(patToken: str, uri: str, responseValueProperty: str = 'value', method: str = "GET", postBody: dict = None) -> [dict]:
+        response = None
+
+        if method == "GET":
+            response = requests.get(uri, auth=HTTPBasicAuth('', patToken))
+        elif method == "POST":
+            response = requests.post(uri, json=postBody, auth=HTTPBasicAuth('', patToken))
         else:
-            return None
+            raise TypeError(f"method: {method} is unsupported.")
+
+        return response.json()[responseValueProperty]
 
     @abc.abstractmethod
     def parsePullRequest(self, pullrequest: [dict]) -> [dict]:
@@ -35,7 +50,7 @@ class RepoInsightsClient(abc.ABC):
         raise NotImplementedError("Please Implement method parsePullRequestComments")
 
     @abc.abstractmethod
-    def parsePullRequestCommits(self, commits: [dict], repo: str) -> [dict]:
+    def parsePullRequestCommits(self, commits: [dict], patToken: str, repo: str) -> [dict]:
         raise NotImplementedError("Please Implement method parsePullRequestCommits")
 
     @abc.abstractmethod
@@ -53,7 +68,7 @@ class RepoInsightsClient(abc.ABC):
     @abc.abstractmethod
     def invokePRsByProjectAPICall(self, patToken: str, repo: str) -> [dict]:
         raise NotImplementedError("Please Implement method invokePRsByProjectAPICall")
-    
+
     @abc.abstractmethod
     def invokePRCommentThreadsAPICall(self, patToken: str, repoID: str, prID: str) -> [dict]:
         raise NotImplementedError("Please Implement method invokePRCommentThreadsAPICall")
@@ -62,22 +77,10 @@ class RepoInsightsClient(abc.ABC):
     def invokePRCommitsAPICall(self, patToken: str, repoID: str, prID: str) -> [dict]:
         raise NotImplementedError("Please Implement method invokePRCommitsAPICall")
 
-    def invokeAPICall(self, patToken: str, uri: str, responseValueProperty: str = 'value', method: str = "GET", postBody: dict = {}) -> [dict]:
-        response = None
-
-        if method == "GET":
-            response = requests.get(uri, auth=HTTPBasicAuth('', patToken))
-        elif method == "POST":
-            response = requests.post(uri, json=postBody, auth=HTTPBasicAuth('', patToken))
-        else:
-            raise TypeError(f"method: {method} is unsupported.")
-
-        return response.json()[responseValueProperty]
-
     def aggregatePullRequestActivity(self, groupByColumns: [str], patToken: str) -> pd.DataFrame:
         return self.collectPullRequestActivity(patToken) \
             .groupby(groupByColumns) \
-            .agg(self.aggregationMeasures)
+            .agg(self.aggregationMeasures())
 
     def collectPullRequestActivity(self, patToken: str) -> pd.DataFrame:
         recordList = []
@@ -99,6 +102,6 @@ class RepoInsightsClient(abc.ABC):
                     recordList += self.parsePullRequestComments(comments['comments'], repo)
 
         workitemResponse = self.invokeWorkitemsAPICall(patToken, self.teamId)
-        recordList += self.parseWorkitems(repo, workitemResponse)
+        recordList += self.parseWorkitems(self.repos[0], workitemResponse)
 
         return pd.DataFrame(recordList)
