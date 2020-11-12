@@ -131,4 +131,5 @@ print(dataframe)
 - Add a new provider to support Git Lab integration
 - [Setuptools](https://setuptools.readthedocs.io/en/latest/setuptools.html) integration for building and distributing packages to pip
 - Integrate [Sphinx](https://www.sphinx-doc.org/en/master/) to autogen SDK docs
-- Integrate code style / linting tools like [Black](https://github.com/psf/black).
+- Add code coverage reporting
+- Integrate code style tools like [Black](https://github.com/psf/black).

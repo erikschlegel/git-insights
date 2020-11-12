@@ -14,7 +14,7 @@ class KeyvaultClient:
         try:
             return self.client.get_secret(secretName)
         except:
-            logging.error("\nFailed retrieving secret value for {0}".format(secretName))
+            logging.error('Failed retrieving secret value for %s', secretName)
             raise
 
     def setClientIfNotExists(self) -> None:

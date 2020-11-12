@@ -1,0 +1,8 @@
+[MESSAGES CONTROL]
+disable=invalid-name, import-error, missing-docstring, unsubscriptable-object, line-too-long, too-many-public-methods, too-many-arguments
+
+[SIMILARITIES]
+ignore-imports=yes
+
+[FORMAT]
+max-line-length=120

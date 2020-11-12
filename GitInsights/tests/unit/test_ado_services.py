@@ -1,9 +1,10 @@
 import json
 import os
-import pandas as pd
-
 from unittest import TestCase
 from unittest.mock import patch, Mock
+
+import pandas as pd
+
 from GitInsights.mods.ado_client import AzureDevopsInsights
 
 def loadMockFile(filePath: str):
@@ -63,18 +64,6 @@ class Test_ADOPrStatService(TestCase):
 
         self.assertEqual(len(response), 8)
 
-    @patch('GitInsights.mods.repo_insights_base.requests.get')
-    def test_repo_pr_stats(self, mock_get):
-        # Configuring the mock to return a response with an OK status code. Also, the mock should have
-        # a `json()` method that returns a list of pr stats.
-
-        mock_get.return_value = Mock(ok=True)
-        mock_get.return_value.json.return_value = self.mockedRepoPrResponse
-        client = AzureDevopsInsights("myorg", "my-super-project", ["repo1"], "team-buffalo")
-        response = client.invokePRsByProjectAPICall("", "repo1")
-
-        self.assertEqual(len(response), 4)
-
     @patch.object(AzureDevopsInsights, 'invokeCommitsByRepoAPICall')
     def test_repo_commits_stats(self, commitsByRepoMock):
         emptyResponse = {"value": []}
@@ -86,7 +75,7 @@ class Test_ADOPrStatService(TestCase):
         self.assertEqual(response['3104bd0b0accbc74278fe6880e53215f6b93a5cd']['Add'], 1)
         self.assertEqual(response['9991b4f66def4c0a9ad8f9f27043ece7eddcf1c7']['Delete'], 1)
 
-    @patch.object(AzureDevopsInsights, 'invokeAPICall')
+    @patch('GitInsights.mods.repo_insights_base.RepoInsightsClient.invokeAPICall')
     def test_invoke_workitem_api(self, invokeAPICallMock):
         invokeAPICallMock.side_effect = [self.mockedWorkitemListResponse['workItems'], self.mockedWorkitemDetailsResponse['value']]
         client = AzureDevopsInsights("myorg", "my-super-project", ["repo1"], "team-buffalo")
