@@ -1,21 +1,24 @@
 import abc
+from typing import Dict
+from typing import List
+
 import pandas as pd
 import requests
-
 from dateutil import parser
 from requests.auth import HTTPBasicAuth
 
+
 class RepoInsightsClient(abc.ABC):
-    def __init__(self, organization: str, project: str, repos: [str], teamId: str, profileAliases: dict = None):
+    def __init__(self, organization: str, project: str, repos: List[str], teamId: str, profileAliases: Dict[str, str] = None):
         if profileAliases is None:
             profileAliases = {}
 
         self.organization: str = organization
         self.project: str = project
-        self.repos: [str] = repos
+        self.repos: List[str] = repos
         self.teamId: str = teamId
         self.profileIdentityAliases = profileAliases
-        self.commitChangeCounts = {}
+        self.commitChangeCounts: Dict[str, dict] = {}
 
         super().__init__()
 
@@ -30,7 +33,7 @@ class RepoInsightsClient(abc.ABC):
         return (fromDatetime - toDatetime).days
 
     @staticmethod
-    def invokeAPICall(patToken: str, uri: str, responseValueProperty: str = 'value', method: str = "GET", postBody: dict = None) -> [dict]:
+    def invokeAPICall(patToken: str, uri: str, responseValueProperty: str = 'value', method: str = "GET", postBody: Dict[str, str] = None) -> List[dict]:
         response = None
 
         if method == "GET":
@@ -43,45 +46,45 @@ class RepoInsightsClient(abc.ABC):
         return response.json()[responseValueProperty]
 
     @abc.abstractmethod
-    def parsePullRequest(self, pullrequest: [dict]) -> [dict]:
+    def parsePullRequest(self, pullrequest: dict) -> List[dict]:
         raise NotImplementedError("Please Implement method parsePullRequest")
 
     @abc.abstractmethod
-    def parsePullRequestComments(self, comments: [dict], repo: str) -> [dict]:
+    def parsePullRequestComments(self, comments: List[dict], repo: str) -> List[dict]:
         raise NotImplementedError("Please Implement method parsePullRequestComments")
 
     @abc.abstractmethod
-    def parsePullRequestCommits(self, commits: [dict], patToken: str, repo: str) -> [dict]:
+    def parsePullRequestCommits(self, commits: List[dict], patToken: str, repo: str) -> List[dict]:
         raise NotImplementedError("Please Implement method parsePullRequestCommits")
 
     @abc.abstractmethod
-    def parseWorkitems(self, repo: str, workitems: [dict]) -> [dict]:
+    def parseWorkitems(self, repo: str, workitems: List[dict]) -> List[dict]:
         raise NotImplementedError("Please Implement method parseWorkitems")
 
     @abc.abstractmethod
-    def invokeWorkitemsAPICall(self, patToken: str, teamID: str) -> [dict]:
+    def invokeWorkitemsAPICall(self, patToken: str, teamID: str) -> List[dict]:
         raise NotImplementedError("Please Implement method invokeWorkitemsAPICall")
 
     @abc.abstractmethod
-    def aggregationMeasures(self) -> dict:
+    def AggregationMeasures(self) -> dict:
         raise NotImplementedError("Please Implement method aggregationMeasures")
 
     @abc.abstractmethod
-    def invokePRsByProjectAPICall(self, patToken: str, repo: str) -> [dict]:
+    def invokePRsByProjectAPICall(self, patToken: str, repo: str) -> List[dict]:
         raise NotImplementedError("Please Implement method invokePRsByProjectAPICall")
 
     @abc.abstractmethod
-    def invokePRCommentThreadsAPICall(self, patToken: str, repoID: str, prID: str) -> [dict]:
+    def invokePRCommentThreadsAPICall(self, patToken: str, repoID: str, prID: str) -> List[dict]:
         raise NotImplementedError("Please Implement method invokePRCommentThreadsAPICall")
 
     @abc.abstractmethod
-    def invokePRCommitsAPICall(self, patToken: str, repoID: str, prID: str) -> [dict]:
+    def invokePRCommitsAPICall(self, patToken: str, repoID: str, prID: str) -> List[dict]:
         raise NotImplementedError("Please Implement method invokePRCommitsAPICall")
 
-    def aggregatePullRequestActivity(self, groupByColumns: [str], patToken: str) -> pd.DataFrame:
+    def aggregatePullRequestActivity(self, groupByColumns: List[str], patToken: str) -> pd.DataFrame:
         return self.collectPullRequestActivity(patToken) \
             .groupby(groupByColumns) \
-            .agg(self.aggregationMeasures())
+            .agg(self.AggregationMeasures())
 
     def collectPullRequestActivity(self, patToken: str) -> pd.DataFrame:
         recordList = []
