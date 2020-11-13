@@ -66,7 +66,7 @@ class AzureDevopsInsights(RepoInsightsClient):
         return {**dict2, **dict1}
 
     @staticmethod
-    def parseRepoCommits(commits: List[dict]) -> Iterator[Tuple[str, dict]]:
+    def ParseRepoCommits(commits: List[dict]) -> Iterator[Tuple[str, dict]]:
         for commit in commits:
             yield commit['commitId'], commit['changeCounts']
 
@@ -126,7 +126,7 @@ class AzureDevopsInsights(RepoInsightsClient):
 
         return workItemDetails
 
-    def parseWorkitems(self, repo: str, workitems: List[dict]) -> List[dict]:
+    def ParseWorkitems(self, repo: str, workitems: List[dict]) -> List[dict]:
         recordList = []
 
         for workitem in workitems:
@@ -168,7 +168,7 @@ class AzureDevopsInsights(RepoInsightsClient):
 
         while new_results:
             response = self.invokeCommitsByRepoAPICall(patToken, repo, topRecords, topRecords * page_count)
-            commitChangeCountDictionary = {**dict(AzureDevopsInsights.parseRepoCommits(response)), **commitChangeCountDictionary}
+            commitChangeCountDictionary = {**dict(AzureDevopsInsights.ParseRepoCommits(response)), **commitChangeCountDictionary}
             new_results = len(response) > 0
             page_count += 1
 
@@ -179,7 +179,7 @@ class AzureDevopsInsights(RepoInsightsClient):
         if uniqueProfileId.lower() not in self.profileIdentityAliases:
             self.profileIdentityAliases[uniqueProfileId.lower()] = displayName
 
-    def parsePullRequest(self, pullrequest: dict) -> List[dict]:
+    def ParsePullRequest(self, pullrequest: dict) -> List[dict]:
         recordList = []
         self.addProfileAliasToRegistry(pullrequest['createdBy']['uniqueName'], pullrequest['createdBy']['displayName'])
 
@@ -210,7 +210,7 @@ class AzureDevopsInsights(RepoInsightsClient):
 
         return recordList
 
-    def parsePullRequestComments(self, comments: List[dict], repo: str) -> List[dict]:
+    def ParsePullRequestComments(self, comments: List[dict], repo: str) -> List[dict]:
         recordList = []
 
         for comment in filter(lambda c: c['commentType'] != 'system', comments):
@@ -225,7 +225,7 @@ class AzureDevopsInsights(RepoInsightsClient):
 
         return recordList
 
-    def parsePullRequestCommits(self, commits: List[dict], patToken: str, repo: str) -> List[dict]:
+    def ParsePullRequestCommits(self, commits: List[dict], patToken: str, repo: str) -> List[dict]:
         recordList = []
 
         if repo not in self.commitChangeCounts:

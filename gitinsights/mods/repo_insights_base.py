@@ -8,6 +8,7 @@ from dateutil import parser
 from requests.auth import HTTPBasicAuth
 
 
+# Base Class For Git Insights
 class RepoInsightsClient(abc.ABC):
     def __init__(self, organization: str, project: str, repos: List[str], teamId: str, profileAliases: Dict[str, str] = None):
         if profileAliases is None:
@@ -46,19 +47,19 @@ class RepoInsightsClient(abc.ABC):
         return response.json()[responseValueProperty]
 
     @abc.abstractmethod
-    def parsePullRequest(self, pullrequest: dict) -> List[dict]:
+    def ParsePullRequest(self, pullrequest: dict) -> List[dict]:
         raise NotImplementedError("Please Implement method parsePullRequest")
 
     @abc.abstractmethod
-    def parsePullRequestComments(self, comments: List[dict], repo: str) -> List[dict]:
+    def ParsePullRequestComments(self, comments: List[dict], repo: str) -> List[dict]:
         raise NotImplementedError("Please Implement method parsePullRequestComments")
 
     @abc.abstractmethod
-    def parsePullRequestCommits(self, commits: List[dict], patToken: str, repo: str) -> List[dict]:
+    def ParsePullRequestCommits(self, commits: List[dict], patToken: str, repo: str) -> List[dict]:
         raise NotImplementedError("Please Implement method parsePullRequestCommits")
 
     @abc.abstractmethod
-    def parseWorkitems(self, repo: str, workitems: List[dict]) -> List[dict]:
+    def ParseWorkitems(self, repo: str, workitems: List[dict]) -> List[dict]:
         raise NotImplementedError("Please Implement method parseWorkitems")
 
     @abc.abstractmethod
@@ -101,11 +102,11 @@ class RepoInsightsClient(abc.ABC):
             for _, pr in pd.DataFrame.from_dict(rsp).iterrows():
                 commentsRsp = self.invokePRCommentThreadsAPICall(patToken, pr['repository']['id'], pr['pullRequestId'])
                 commitsRsp = self.invokePRCommitsAPICall(patToken, pr['repository']['id'], pr['pullRequestId'])
-                recordList += self.parsePullRequest(pr) + self.parsePullRequestCommits(commitsRsp, patToken, repo)
+                recordList += self.ParsePullRequest(pr) + self.ParsePullRequestCommits(commitsRsp, patToken, repo)
                 for comments in commentsRsp:
-                    recordList += self.parsePullRequestComments(comments['comments'], repo)
+                    recordList += self.ParsePullRequestComments(comments['comments'], repo)
 
         workitemResponse = self.invokeWorkitemsAPICall(patToken, self.teamId)
-        recordList += self.parseWorkitems(self.repos[0], workitemResponse)
+        recordList += self.ParseWorkitems(self.repos[0], workitemResponse)
 
         return pd.DataFrame(recordList)
