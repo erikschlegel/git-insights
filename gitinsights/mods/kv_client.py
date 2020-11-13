@@ -1,19 +1,21 @@
 import logging
 
-from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import KeyVaultSecret
+from azure.keyvault.secrets import SecretClient
+
 
 class KeyvaultClient:
     def __init__(self, kvURI: str):
         self.kvURI: str = kvURI
         self.client: SecretClient = None
 
-    def getSecretValue(self, secretName: str) -> str:
+    def getSecretValue(self, secretName: str) -> KeyVaultSecret:
         self.setClientIfNotExists()
 
         try:
             return self.client.get_secret(secretName)
-        except:
+        except Exception:
             logging.error('Failed retrieving secret value for %s', secretName)
             raise
 

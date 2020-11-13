@@ -1,24 +1,27 @@
 import json
 import os
 from unittest import TestCase
-from unittest.mock import patch, Mock
+from unittest.mock import Mock
+from unittest.mock import patch
 
 import pandas as pd
 
-from GitInsights.mods.ado_client import AzureDevopsInsights
+from gitinsights.mods.ado_client import AzureDevopsInsights
+
 
 def loadMockFile(filePath: str):
     with open(os.path.join(os.path.dirname(__file__), filePath)) as f:
         return json.load(f)
+
 
 def aggregateDataframe(df: pd.DataFrame) -> pd.DataFrame:
     return df.groupby(['week']) \
         .agg(
             {
                 'prs_merged': 'sum',
-                'prs_submitted': 'sum', 
-                'pr_completion_days': 'mean', 
-                'pr_comments': 'sum', 
+                'prs_submitted': 'sum',
+                'pr_completion_days': 'mean',
+                'pr_comments': 'sum',
                 'prs_reviewed': 'sum',
                 'pr_commits_pushed': 'sum',
                 'commit_change_count_edits': 'sum',
@@ -31,6 +34,7 @@ def aggregateDataframe(df: pd.DataFrame) -> pd.DataFrame:
                 'user_stories_created': 'sum'
             })
 
+
 class Test_ADOPrStatService(TestCase):
     def setUp(self):
         self.mockedRepoPrResponse = loadMockFile("./data/prStatsByProject.json")
@@ -40,7 +44,7 @@ class Test_ADOPrStatService(TestCase):
         self.mockedWorkitemListResponse = loadMockFile("./data/workitemList.json")
         self.mockedWorkitemDetailsResponse = loadMockFile("./data/workitemDetails.json")
 
-    @patch('GitInsights.mods.repo_insights_base.requests.get')
+    @patch('gitinsights.mods.repo_insights_base.requests.get')
     def test_repo_pr_stats(self, mock_get):
         # Configuring the mock to return a response with an OK status code. Also, the mock should have
         # a `json()` method that returns a list of pr stats.
@@ -52,11 +56,11 @@ class Test_ADOPrStatService(TestCase):
 
         self.assertEqual(len(response), 4)
 
-    @patch('GitInsights.mods.repo_insights_base.requests.get')
+    @patch('gitinsights.mods.repo_insights_base.requests.get')
     def test_repo_pr_threads_stats(self, mock_get):
         # Configuring the mock to return a response with an OK status code. Also, the mock should have
         # a `json()` method that returns a list of pr threads.
-        
+
         mock_get.return_value = Mock(ok=True)
         mock_get.return_value.json.return_value = self.mockedPrThreadsResponse
         client = AzureDevopsInsights("myorg", "my-super-project", ["repo1"], "team-buffalo")
@@ -75,7 +79,7 @@ class Test_ADOPrStatService(TestCase):
         self.assertEqual(response['3104bd0b0accbc74278fe6880e53215f6b93a5cd']['Add'], 1)
         self.assertEqual(response['9991b4f66def4c0a9ad8f9f27043ece7eddcf1c7']['Delete'], 1)
 
-    @patch('GitInsights.mods.repo_insights_base.RepoInsightsClient.invokeAPICall')
+    @patch('gitinsights.mods.repo_insights_base.RepoInsightsClient.invokeAPICall')
     def test_invoke_workitem_api(self, invokeAPICallMock):
         invokeAPICallMock.side_effect = [self.mockedWorkitemListResponse['workItems'], self.mockedWorkitemDetailsResponse['value']]
         client = AzureDevopsInsights("myorg", "my-super-project", ["repo1"], "team-buffalo")

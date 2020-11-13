@@ -8,6 +8,7 @@ import azure.functions as func
 from .mods.ado_client import AzureDevopsInsights
 from .mods.kv_client import KeyvaultClient
 
+
 def main(mytimer: func.TimerRequest, outputBlob: func.Out[func.InputStream]) -> None:
     # Required settings
     keyVaultName = os.environ["KeyvaultName"]

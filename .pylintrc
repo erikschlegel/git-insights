@@ -1,5 +1,6 @@
 [MESSAGES CONTROL]
 disable=invalid-name, import-error, missing-docstring, unsubscriptable-object, line-too-long, too-many-public-methods, too-many-arguments
+ignore-patterns=setup.py
 
 [SIMILARITIES]
 ignore-imports=yes

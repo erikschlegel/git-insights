@@ -1,17 +1,23 @@
 import logging
-
 from enum import Enum
-from dateutil import parser
+from typing import Dict
+from typing import Iterator
+from typing import List
+from typing import Tuple
 
 import numpy as np
+from dateutil import parser
+
 from .repo_insights_base import RepoInsightsClient
+
 
 class PullRequestVoteStatus(Enum):
     APPROVED = 10
     APPROVED_WITH_SUGGESTIONS = 5
 
+
 class AzureDevopsInsights(RepoInsightsClient):
-    def aggregationMeasures(self) -> dict:
+    def AggregationMeasures(self) -> dict:
         return {
                 'prs_merged': 'sum',
                 'prs_submitted': 'sum',
@@ -31,7 +37,7 @@ class AzureDevopsInsights(RepoInsightsClient):
         }
 
     @property
-    def reportableFieldsDefault(self) -> dict:
+    def ReportableFieldsDefault(self) -> dict:
         return {
                 'contributor': np.nan,
                 'prs_submitted': 0,
@@ -60,7 +66,7 @@ class AzureDevopsInsights(RepoInsightsClient):
         return {**dict2, **dict1}
 
     @staticmethod
-    def parseRepoCommits(commits: [dict]) -> dict:
+    def ParseRepoCommits(commits: List[dict]) -> Iterator[Tuple[str, dict]]:
         for commit in commits:
             yield commit['commitId'], commit['changeCounts']
 
@@ -69,28 +75,28 @@ class AzureDevopsInsights(RepoInsightsClient):
 
         return uriFormat.format(self.organization, self.project, repo, prID)
 
-    def repoPullRequestsURI(self, repo: str):
+    def repoPullRequestsURI(self, repo: str) -> str:
         uriFormat = 'https://dev.azure.com/{}/{}/_apis/git/repositories/{}/pullrequests?searchCriteria.status={}&api-version=6.0'
         prStatusFilter: str = "all"
 
         return uriFormat.format(self.organization, self.project, repo, prStatusFilter)
 
-    def repoCommitsURI(self, repo: str, topRecords: int, skippedRecords: int):
+    def repoCommitsURI(self, repo: str, topRecords: int, skippedRecords: int) -> str:
         uriFormat = 'https://dev.azure.com/{}/{}/_apis/git/repositories/{}/commits?&searchCriteria.$skip={}&searchCriteria.$top={}&api-version=6.0'
 
         return uriFormat.format(self.organization, self.project, repo, skippedRecords, topRecords)
 
-    def repoPrCommitsURI(self, repo: str, prID: str):
+    def repoPrCommitsURI(self, repo: str, prID: str) -> str:
         uriFormat = 'https://dev.azure.com/{}/{}/_apis/git/repositories/{}/pullrequests/{}/commits?api-version=6.0'
 
         return uriFormat.format(self.organization, self.project, repo, prID)
 
-    def listWorkitemIdsURI(self, teamId: str):
+    def listWorkitemIdsURI(self, teamId: str) -> str:
         uriFormat = 'https://dev.azure.com/{}/{}/{}/_apis/wit/wiql?api-version=6.0'
 
         return uriFormat.format(self.organization, self.project, teamId)
 
-    def getWorkitemDetailsURI(self, workItemIds: [str]):
+    def getWorkitemDetailsURI(self, workItemIds: List[str]) -> str:
         if len(workItemIds) > 200:
             raise SystemError('The workitems API only supports up to 200 items for a single call.')
 
@@ -98,16 +104,16 @@ class AzureDevopsInsights(RepoInsightsClient):
 
         return uriFormat.format(self.organization, self.project, ','.join(workItemIds))
 
-    def invokePRCommentThreadsAPICall(self, patToken: str, repoID: str, prID: str) -> [dict]:
+    def invokePRCommentThreadsAPICall(self, patToken: str, repoID: str, prID: str) -> List[dict]:
         return RepoInsightsClient.invokeAPICall(patToken, self.prCommentThreadsURI(repoID, prID))
 
-    def invokePRCommitsAPICall(self, patToken: str, repoID: str, prID: str) -> [dict]:
+    def invokePRCommitsAPICall(self, patToken: str, repoID: str, prID: str) -> List[dict]:
         return RepoInsightsClient.invokeAPICall(patToken, self.repoPrCommitsURI(repoID, prID))
 
-    def invokePRsByProjectAPICall(self, patToken: str, repo: str) -> [dict]:
+    def invokePRsByProjectAPICall(self, patToken: str, repo: str) -> List[dict]:
         return RepoInsightsClient.invokeAPICall(patToken, self.repoPullRequestsURI(repo))
 
-    def invokeWorkitemsAPICall(self, patToken: str, teamID: str) -> [dict]:
+    def invokeWorkitemsAPICall(self, patToken: str, teamID: str) -> List[dict]:
         wiQLQuery = "Select [System.Id] From WorkItems Where [System.WorkItemType] = 'User Story' AND [State] <> 'Removed'"
         workitemListResponse = RepoInsightsClient.invokeAPICall(patToken, self.listWorkitemIdsURI(teamID), 'workItems', "POST", {"query": wiQLQuery})
         workItemDetails = []
@@ -120,49 +126,49 @@ class AzureDevopsInsights(RepoInsightsClient):
 
         return workItemDetails
 
-    def parseWorkitems(self, repo: str, workitems: [dict]) -> [dict]:
+    def ParseWorkitems(self, repo: str, workitems: List[dict]) -> List[dict]:
         recordList = []
 
         for workitem in workitems:
             recordList.append(
                 AzureDevopsInsights.mergeDictionaries(
-                {
-                    'contributor': workitem['fields']['System.CreatedBy']['displayName'],
-                    'week': parser.parse(workitem['fields']['System.CreatedDate']).strftime("%V"),
-                    'repo': repo,
-                    'user_stories_created': 1
-                }, self.reportableFieldsDefault))
+                    {
+                        'contributor': workitem['fields']['System.CreatedBy']['displayName'],
+                        'week': parser.parse(workitem['fields']['System.CreatedDate']).strftime("%V"),
+                        'repo': repo,
+                        'user_stories_created': 1
+                    }, self.ReportableFieldsDefault))
 
             if {'Microsoft.VSTS.Common.ActivatedDate', 'System.AssignedTo'} <= set(workitem['fields']) and workitem['fields']['System.State'] != 'New':
                 recordList.append(
                     AzureDevopsInsights.mergeDictionaries(
-                    {
-                        'contributor': workitem['fields']['System.AssignedTo']['displayName'],
-                        'week': parser.parse(workitem['fields']['Microsoft.VSTS.Common.ActivatedDate']).strftime("%V"),
-                        'repo': repo,
-                        'user_stories_assigned': 1,
-                        'user_stories_completed': 1 if workitem['fields']['System.State'] in ['Closed', 'Resolved'] else 0,
-                        'user_story_points_completed': workitem['fields']['Microsoft.VSTS.Scheduling.StoryPoints'] if workitem['fields']['System.State'] in ['Closed', 'Resolved'] and 'Microsoft.VSTS.Scheduling.StoryPoints' in workitem['fields'] else 0,
-                        'user_story_points_assigned': workitem['fields']['Microsoft.VSTS.Scheduling.StoryPoints'] if 'Microsoft.VSTS.Scheduling.StoryPoints' in workitem['fields'] else 0,
-                        'user_story_completion_days': RepoInsightsClient.dateStrDiffInDays(workitem['fields']['Microsoft.VSTS.Common.ResolvedDate'], workitem['fields']['Microsoft.VSTS.Common.ActivatedDate']) if workitem['fields']['System.State'] in ['Closed', 'Resolved'] else np.nan
-                    }, self.reportableFieldsDefault))
+                        {
+                            'contributor': workitem['fields']['System.AssignedTo']['displayName'],
+                            'week': parser.parse(workitem['fields']['Microsoft.VSTS.Common.ActivatedDate']).strftime("%V"),
+                            'repo': repo,
+                            'user_stories_assigned': 1,
+                            'user_stories_completed': 1 if workitem['fields']['System.State'] in ['Closed', 'Resolved'] else 0,
+                            'user_story_points_completed': workitem['fields']['Microsoft.VSTS.Scheduling.StoryPoints'] if workitem['fields']['System.State'] in ['Closed', 'Resolved'] and 'Microsoft.VSTS.Scheduling.StoryPoints' in workitem['fields'] else 0,
+                            'user_story_points_assigned': workitem['fields']['Microsoft.VSTS.Scheduling.StoryPoints'] if 'Microsoft.VSTS.Scheduling.StoryPoints' in workitem['fields'] else 0,
+                            'user_story_completion_days': RepoInsightsClient.dateStrDiffInDays(workitem['fields']['Microsoft.VSTS.Common.ResolvedDate'], workitem['fields']['Microsoft.VSTS.Common.ActivatedDate']) if workitem['fields']['System.State'] in ['Closed', 'Resolved'] else np.nan
+                        }, self.ReportableFieldsDefault))
 
         return recordList
 
-    def invokeGetWorkitemDetailsAPICall(self, patToken: str, workItemIds: [str]) -> [dict]:
+    def invokeGetWorkitemDetailsAPICall(self, patToken: str, workItemIds: List[str]) -> List[dict]:
         return RepoInsightsClient.invokeAPICall(patToken, self.getWorkitemDetailsURI(workItemIds))
 
-    def invokeCommitsByRepoAPICall(self, patToken: str, repo: str, topRecords: int, skippedRecords: int) -> [dict]:
+    def invokeCommitsByRepoAPICall(self, patToken: str, repo: str, topRecords: int, skippedRecords: int) -> List[dict]:
         return RepoInsightsClient.invokeAPICall(patToken, self.repoCommitsURI(repo, topRecords, skippedRecords))
 
     def repoCommits(self, patToken: str, repo: str, topRecords: int = 400) -> dict:
         new_results = True
-        commitChangeCountDictionary = {}
+        commitChangeCountDictionary: Dict[str, dict] = {}
         page_count = 1
 
         while new_results:
             response = self.invokeCommitsByRepoAPICall(patToken, repo, topRecords, topRecords * page_count)
-            commitChangeCountDictionary = {**dict(AzureDevopsInsights.parseRepoCommits(response)), **commitChangeCountDictionary}
+            commitChangeCountDictionary = {**dict(AzureDevopsInsights.ParseRepoCommits(response)), **commitChangeCountDictionary}
             new_results = len(response) > 0
             page_count += 1
 
@@ -173,56 +179,56 @@ class AzureDevopsInsights(RepoInsightsClient):
         if uniqueProfileId.lower() not in self.profileIdentityAliases:
             self.profileIdentityAliases[uniqueProfileId.lower()] = displayName
 
-    def parsePullRequest(self, pullrequest: [dict]) -> [dict]:
+    def ParsePullRequest(self, pullrequest: dict) -> List[dict]:
         recordList = []
         self.addProfileAliasToRegistry(pullrequest['createdBy']['uniqueName'], pullrequest['createdBy']['displayName'])
 
         recordList.append(
             AzureDevopsInsights.mergeDictionaries(
-            {
-                'contributor': pullrequest['createdBy']['displayName'],
-                'prs_submitted': 1,
-                'prs_merged': 1 if pullrequest['status'] == 'completed' else 0,
-                'week': parser.parse(pullrequest['creationDate']).strftime("%V"),
-                'creation_datetime': parser.parse(pullrequest['creationDate']),
-                'completion_date': parser.parse(pullrequest['closedDate']) if pullrequest['status'] == 'completed' else np.nan,
-                'pr_completion_days': RepoInsightsClient.dateStrDiffInDays(pullrequest['closedDate'], pullrequest['creationDate']) if pullrequest['status'] == 'completed' else np.nan,
-                'repo': pullrequest['repository']['name']
-            }, self.reportableFieldsDefault))
+                {
+                    'contributor': pullrequest['createdBy']['displayName'],
+                    'prs_submitted': 1,
+                    'prs_merged': 1 if pullrequest['status'] == 'completed' else 0,
+                    'week': parser.parse(pullrequest['creationDate']).strftime("%V"),
+                    'creation_datetime': parser.parse(pullrequest['creationDate']),
+                    'completion_date': parser.parse(pullrequest['closedDate']) if pullrequest['status'] == 'completed' else np.nan,
+                    'pr_completion_days': RepoInsightsClient.dateStrDiffInDays(pullrequest['closedDate'], pullrequest['creationDate']) if pullrequest['status'] == 'completed' else np.nan,
+                    'repo': pullrequest['repository']['name']
+                }, self.ReportableFieldsDefault))
 
         for review in filter(lambda rv: rv['vote'] in [PullRequestVoteStatus.APPROVED.value, PullRequestVoteStatus.APPROVED_WITH_SUGGESTIONS.value] and 'isContainer' not in rv, pullrequest['reviewers']):
             self.addProfileAliasToRegistry(review['uniqueName'], review['displayName'])
 
             recordList.append(
                 AzureDevopsInsights.mergeDictionaries(
-                {
-                    'contributor': review['displayName'],
-                    'week': parser.parse(pullrequest['creationDate']).strftime("%V"),
-                    'prs_reviewed': 1,
-                    'repo': pullrequest['repository']['name']
-                }, self.reportableFieldsDefault))
+                    {
+                        'contributor': review['displayName'],
+                        'week': parser.parse(pullrequest['creationDate']).strftime("%V"),
+                        'prs_reviewed': 1,
+                        'repo': pullrequest['repository']['name']
+                    }, self.ReportableFieldsDefault))
 
         return recordList
 
-    def parsePullRequestComments(self, comments: [dict], repo: str) -> [dict]:
+    def ParsePullRequestComments(self, comments: List[dict], repo: str) -> List[dict]:
         recordList = []
 
         for comment in filter(lambda c: c['commentType'] != 'system', comments):
             recordList.append(
                 AzureDevopsInsights.mergeDictionaries(
-                {
-                    'contributor': comment['author']['displayName'],
-                    'week': parser.parse(comment['lastUpdatedDate']).strftime("%V"),
-                    'pr_comments': 1,
-                    'repo': repo
-                }, self.reportableFieldsDefault))
+                    {
+                        'contributor': comment['author']['displayName'],
+                        'week': parser.parse(comment['lastUpdatedDate']).strftime("%V"),
+                        'pr_comments': 1,
+                        'repo': repo
+                    }, self.ReportableFieldsDefault))
 
         return recordList
 
-    def parsePullRequestCommits(self, commits: [dict], patToken: str, repo: str) -> [dict]:
+    def ParsePullRequestCommits(self, commits: List[dict], patToken: str, repo: str) -> List[dict]:
         recordList = []
 
-        if not repo in self.commitChangeCounts:
+        if repo not in self.commitChangeCounts:
             self.commitChangeCounts[repo] = self.repoCommits(patToken, repo)
 
         repoCommitChangeCounts = self.commitChangeCounts[repo]
@@ -234,7 +240,7 @@ class AzureDevopsInsights(RepoInsightsClient):
             # If the author doesn't have their email configured within their local git profile
             if 'email' not in commit['author']:
                 # search by author displayname
-                authorAlias = {v:k for k, v in self.profileIdentityAliases.items()}[commit['author']['name']].lower()
+                authorAlias = {v: k for k, v in self.profileIdentityAliases.items()}[commit['author']['name']].lower()
             else:
                 authorAlias = commit['author']['email'].lower()
 
@@ -245,14 +251,14 @@ class AzureDevopsInsights(RepoInsightsClient):
 
             recordList.append(
                 AzureDevopsInsights.mergeDictionaries(
-                {
-                    'contributor': self.profileIdentityAliases[authorAlias],
-                    'week': parser.parse(commit['author']['date']).strftime("%V"),
-                    'pr_commits_pushed': 1,
-                    'commit_change_count_edits': repoCommitChangeCounts[commit['commitId']]['Edit'],
-                    'commit_change_count_deletes': repoCommitChangeCounts[commit['commitId']]['Delete'],
-                    'commit_change_count_additions': repoCommitChangeCounts[commit['commitId']]['Add'],
-                    'repo': repo
-                }, self.reportableFieldsDefault))
+                    {
+                        'contributor': self.profileIdentityAliases[authorAlias],
+                        'week': parser.parse(commit['author']['date']).strftime("%V"),
+                        'pr_commits_pushed': 1,
+                        'commit_change_count_edits': repoCommitChangeCounts[commit['commitId']]['Edit'],
+                        'commit_change_count_deletes': repoCommitChangeCounts[commit['commitId']]['Delete'],
+                        'commit_change_count_additions': repoCommitChangeCounts[commit['commitId']]['Add'],
+                        'repo': repo
+                    }, self.ReportableFieldsDefault))
 
         return recordList

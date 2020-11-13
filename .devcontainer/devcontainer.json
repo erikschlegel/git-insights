@@ -6,7 +6,13 @@
 
 	// Set *default* container specific settings.json values on container create.
 	"settings":  {
-		"terminal.integrated.shell.linux": "/bin/bash"
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"python.linting.enabled": true,
+		"python.linting.pylintEnabled": true,
+		"python.linting.mypyEnabled": true,
+		"python.testing.unittestEnabled": true,
+		"python.testing.autoTestDiscoverOnSaveEnabled": true,
+		"python.linting.flake8Enabled": true
 	},
 
 	// Add the IDs of extensions you want installed when the container is created.
