@@ -5,7 +5,7 @@
     "azureFunctions.projectLanguage": "Python",
     "azureFunctions.projectRuntime": "~3",
     "debug.internalConsoleOptions": "neverOpen",
-    "python.pythonPath": "/workspaces/azure-devops-pr-stats-az-function/.venv/bin/python",
+    "python.pythonPath": ".venv/bin/python",
     "python.testing.unittestArgs": [
         "-v",
         "-s",
