@@ -1,4 +1,18 @@
 # Git-based SCM Insights SDK
+- [Git-based SCM Insights SDK](#git-based-scm-insights-sdk)
+  - [Overview](#overview)
+    - [Supported Source Code Management Providers](#supported-source-code-management-providers)
+    - [ADO Insight Capabilities](#ado-insight-capabilities)
+    - [Reportable Fields](#reportable-fields)
+  - [Installation](#installation)
+    - [Option 1 - Install with pip](#option-1---install-with-pip)
+    - [Option 2 - Setup local Azure Function environment](#option-2---setup-local-azure-function-environment)
+      - [Azure Function Prerequisites](#azure-function-prerequisites)
+      - [Steps](#steps)
+  - [SDK Usage](#sdk-usage)
+    - [Example](#example)
+  - [Backlog Features - will be migrated to repo backlog](#backlog-features---will-be-migrated-to-repo-backlog)
+  - [Contributing](#contributing)
 
 [![Build Status](https://travis-ci.com/erikschlegel/git-insights.svg?branch=main)](https://travis-ci.com/erikschlegel/git-insights)
 [![codecov](https://codecov.io/gh/erikschlegel/git-insights/branch/main/graph/badge.svg)](https://codecov.io/gh/erikschlegel/git-insights)
@@ -16,7 +30,8 @@
 
 ### Supported Source Code Management Providers
 - [Azure Dev OPS](https://azure.microsoft.com/en-us/services/devops/)
-- Git Lab (_coming soon_)
+- GitLab (_coming soon_)
+- GitHub (_coming soon_)
 
 ### ADO Insight Capabilities
  - Active / completed workitems (_incl duration averages_)
@@ -111,7 +126,7 @@ After signing in, verify that the status bar says Azure: Signed In and your subs
 ### Example
 
 ```python
-from git-insights import AzureDevopsInsights
+from gitinsights.mods.ado_client import AzureDevopsInsights
 
 adoProject = "Seinfeld-Trivia"
 adoOrg = "Best-Shows"
@@ -137,3 +152,15 @@ print(dataframe)
 - Add pre-commit hook to block pushes including creds
 - Add a new provider to support Git Lab integration
 - Integrate [Sphinx](https://www.sphinx-doc.org/en/master/) to autogen SDK docs
+
+## Contributing
+
+============
+
+You can contribute to the project in multiple ways:
+
+* Write documentation
+* Implement features
+* Fix bugs
+* Add unit and functional tests
+* Everything else you can think of
