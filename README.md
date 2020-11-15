@@ -1,4 +1,13 @@
 # Git-based SCM Insights SDK
+
+[![Build Status](https://travis-ci.com/erikschlegel/git-insights.svg?branch=main)](https://travis-ci.com/erikschlegel/git-insights)
+[![codecov](https://codecov.io/gh/erikschlegel/git-insights/branch/main/graph/badge.svg)](https://codecov.io/gh/erikschlegel/git-insights)
+[![PyPI version](https://badge.fury.io/py/gitinsights.svg)](https://badge.fury.io/py/gitinsights)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/gitinsights.svg)](https://pypi.org/project/gitinsights/)
+[![PyPI - License](https://img.shields.io/pypi/l/gitinsights.svg)](https://pypi.org/project/gitinsights/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/gitinsights.svg)](https://pypi.org/project/gitinsights/)
+
+
 `git-insights` is a _work in progress / early days_ toolset enabling engineering leads to gain insights around how a team is collaborating towards a project's workitems and codebase. Devs can use this sdk to identify opportunities to collectively help other team members improve collaboration.
 
 `git-insights` connects to your existing source code management repositories and work item activities to provide insights toward active and completed scheduled work, git commits, pull requests and code reviews. The dataset can also be used to collectively celebrate progress week over week.
@@ -124,12 +133,7 @@ print(dataframe)
   - Add Azure Function Continuous Delivery Pipeline
   - Integrate with PowerBI
   - Terraform integration to automate scaffolding of keyvault, azure function and blob storage resources
-- Travis Continuous Integration pipeline
-  - Add support for module release publishing to pip registry
 - Add E2E Integration Tests
 - Add pre-commit hook to block pushes including creds
 - Add a new provider to support Git Lab integration
-- [Setuptools](https://setuptools.readthedocs.io/en/latest/setuptools.html) integration for building and distributing packages to pip
 - Integrate [Sphinx](https://www.sphinx-doc.org/en/master/) to autogen SDK docs
-- Add code coverage reporting
-- Integrate code style tools like [Black](https://github.com/psf/black).
