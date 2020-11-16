@@ -99,6 +99,7 @@ celerybeat-schedule
 *.sage.py
 
 # Environments
+.envrc
 .env
 .venv
 env/
@@ -131,3 +132,8 @@ obj
 appsettings.json
 local.settings.json
 .python_packages
+
+# terraform
+.terraform/
+terraform.tfstate*
+.terraform*

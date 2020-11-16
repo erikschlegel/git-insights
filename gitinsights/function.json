@@ -6,7 +6,7 @@
       "type": "timerTrigger",
       "direction": "in",
       "useMonitor": true,
-      "schedule": "0 0 9 * * Fri",
+      "schedule": "0 */10 * * * *",
       "runOnStartup": false
     },
     {
