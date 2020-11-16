@@ -1,13 +1,13 @@
 variable "service_name" {
   type        = string
   default     = "gitinsights"
-  description = "Resource prefix"
+  description = "Name of service. Used as a resource prefix."
 }
 
 variable "env" {
   type        = string
   default     = "dev"
-  description = "Environment (i.e., dev, int, prod)"
+  description = "Environment (i.e., dev, int, prod)."
 }
 
 variable "location" {
@@ -17,7 +17,7 @@ variable "location" {
 
 variable "token" {
   type        = string
-  description = "Token used to authenticate with git hosting service (ADO, GitHub, GitLab)"
+  description = "Token used to authenticate with git hosting service (ADO, GitHub, GitLab)."
 }
 
 variable "ado_config" {
@@ -28,5 +28,5 @@ variable "ado_config" {
     backlog_team_name = string,
     profile_aliases   = map(string)
   })
-  description = "Azure DevOps configuration. repo_names should be comma-delimited"
+  description = "Azure DevOps configuration. repo_names should be comma-delimited. profile_aliases should be a map of key value pairs for alias overrides."
 }

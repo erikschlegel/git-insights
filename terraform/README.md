@@ -1,5 +1,12 @@
 # Infrastructure as Code deployment through Terraform
 
+This document walks you through deploying and configuring the `gitinsights` function through Terraform. Specifically, the templates here will deploy the following:
+
+* Storage account and container used to hold [Terraform state](https://www.terraform.io/docs/state/remote.html). These are kept in a separate resource group from the service deployment.
+* Resource group for `gitinsights` function deployment
+* KeyVault for hosting Azure DevOps token. The token is automatically created as a secret in this vault
+* Consumption App Service Plan
+* Azure Function with Managed Identity that can consume secrets from KeyVault
 
 ## Configure environment
 
