@@ -44,6 +44,9 @@
  - Azure Function integration to support report scheduling and delivery
 
 ### Reportable Fields
+
+[Sample Dataset](data_samples/seinfeld_trivia.csv)
+
 | Field Name  | Description | Type |
 | ------------- | ------------- | ------------- |
 | `contributor`  | The profile display name of the activity contributor / assignee  | `String` |
@@ -94,6 +97,8 @@ pip install git-insights
 1. Clone the repo
 ```
 git clone https://github.com/erikschlegel/git-insights.git
+cd git-insights
+pip install -r requirements.txt && pip install -r requirements-dev.txt
 ```
 
 2. Within Visual Studio Code, open up the project folder as a new Dev Container which will setup the Azure Function Extension and your local python environment.
@@ -121,6 +126,8 @@ After signing in, verify that the status bar says Azure: Signed In and your subs
 
 7. The function will write the results to your blob storage account prior to completion.
 
+_JFYI_: This particular Azure Function is scheduled to run every friday at 9AM. Edit [`functions.json`](./gitinsights/function.json) if you'd like to change the [NCRONTAB schedule](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-examples).
+
 ## SDK Usage
 
 ### Example
@@ -136,7 +143,7 @@ patToken = "Kramers-secret"
 
 groupByColumns = ['contributor', 'week', 'repo']
 
-client = AzureDevopsInsights(adoOrg, adoProject, repos, teamId, aliasDict)
+client = AzureDevopsInsights(adoOrg, adoProject, repos, teamId)
 dataframe = client.aggregatePullRequestActivity(groupByColumns, patToken)
 
 print(dataframe)
