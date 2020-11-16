@@ -6,6 +6,7 @@
     "AdoProjectName": "<REQUIRED_VALUE>",
     "AdoOrgName": "<REQUIRED_VALUE>",
     "AdoRepos": "<REQUIRED_VALUE>",
+    "ProfileAliases": "{}",
     "BacklogTeamId": "<REQUIRED_VALUE>",
     "AZURE_CLIENT_SECRET": "<REQUIRED_VALUE>",
     "AZURE_TENANT_ID": "<REQUIRED_VALUE>",
