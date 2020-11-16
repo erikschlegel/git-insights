@@ -6,7 +6,8 @@
     - [Reportable Fields](#reportable-fields)
   - [Installation](#installation)
     - [Option 1 - Install with pip](#option-1---install-with-pip)
-    - [Option 2 - Setup local Azure Function environment](#option-2---setup-local-azure-function-environment)
+    - [Option 2 - Deploy to Azure with Terraform](#option-2---deploy-to-azure-with-terraform)
+    - [Option 3 - Setup local Azure Function environment](#option-2---setup-local-azure-function-environment)
       - [Azure Function Prerequisites](#azure-function-prerequisites)
       - [Steps](#steps)
   - [SDK Usage](#sdk-usage)
@@ -83,7 +84,11 @@ This SDK can be used either through the pip package or as an Azure Function.
 pip install git-insights
 ```
 
-### Option 2 - Setup local Azure Function environment
+### Option 2 - Deploy to Azure with Terraform
+
+This application can be easily deployed to Azure using Terraform by following the [Terraform Getting Started Guide](./terraform/README.md)
+
+### Option 3 - Setup local Azure Function environment
 
 #### Azure Function Prerequisites
 - VSCode
