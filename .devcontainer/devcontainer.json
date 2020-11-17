@@ -19,7 +19,8 @@
 	"extensions": [
 		"ms-azuretools.vscode-azurefunctions",
 		"ms-azuretools.vscode-docker",
-		"ms-python.python"
+		"ms-python.python",
+		"HashiCorp.terraform"
 	],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
