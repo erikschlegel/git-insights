@@ -7,6 +7,7 @@ resource "azurerm_key_vault" "kv" {
   resource_group_name = azurerm_resource_group.rg.name
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = "standard"
+  tags                = local.tags
 }
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy
@@ -27,7 +28,8 @@ resource "azurerm_key_vault_access_policy" "function-get" {
 }
 
 resource "azurerm_key_vault_secret" "token" {
-  name         = "token"
+  name         = "gitinsights-pat"
   value        = var.token
   key_vault_id = azurerm_key_vault.kv.id
+  tags         = local.tags
 }

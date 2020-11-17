@@ -42,6 +42,7 @@ locals {
 resource "azurerm_resource_group" "rg" {
   name     = format("%s-rg", local.prefix)
   location = var.location
+  tags     = local.tags
 }
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_insights
@@ -50,4 +51,5 @@ resource "azurerm_application_insights" "ai" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   application_type    = "other"
+  tags                = local.tags
 }
