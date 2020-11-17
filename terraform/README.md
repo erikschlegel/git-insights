@@ -23,6 +23,8 @@ export $(cat $DOT_ENV | grep -v '^\s*#' | xargs)
 
 Terraform state should live in a remote container in order to be leveraged across a variety of machines (developer workstations, CI agents, etc...). The `bootstrap` module provisions and configures the state container:
 
+> **Note**: ensure that the [required environment variables](./bootstrap/.env.template) are properly configured
+
 ```bash
 cd bootstrap/
 terraform apply
@@ -39,7 +41,7 @@ cd ..
 
 Now that the remote state container is configured it is possible to deploy the infrastructure:
 
-> **Note**: instructions for setting `ARM_ACCESS_KEY`, `ARM_ACCOUNT_NAME`, `ARM_CONTAINER_NAME` are described above.
+> **Note**: ensure that the [required environment variables](./git-insights/.env.template) are properly configuredInstructions for setting `ARM_ACCESS_KEY`, `ARM_ACCOUNT_NAME`, `ARM_CONTAINER_NAME` are described above.
 
 ```bash
 cd git-insights
