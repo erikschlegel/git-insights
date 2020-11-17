@@ -57,7 +57,7 @@ cd ..
 
 ### Build & Deploy Azure Function
 
-Now you should be able to deploy the function usign the command below:
+Now you should be able to deploy the function using the command below:
 
 > **Note**: this command should be run from the project root. Instructions for setting `FUNCTION_NAME` are described above.
 
