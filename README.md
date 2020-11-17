@@ -7,7 +7,7 @@
   - [Installation](#installation)
     - [Option 1 - Install with pip](#option-1---install-with-pip)
     - [Option 2 - Deploy to Azure with Terraform](#option-2---deploy-to-azure-with-terraform)
-    - [Option 3 - Setup local Azure Function environment](#option-2---setup-local-azure-function-environment)
+    - [Option 3 - Setup local Azure Function environment](#option-3---setup-local-azure-function-environment)
       - [Azure Function Prerequisites](#azure-function-prerequisites)
       - [Steps](#steps)
   - [SDK Usage](#sdk-usage)
@@ -77,6 +77,7 @@ This SDK can be used either through the pip package or as an Azure Function.
 - An Azure Subscription
 - An [ADO PAT Token](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page#create-a-pat) with read permissions
 - An ADO organization, project, repo(s) and a backlog team
+- All project dependencies such as Python, Azure Functions CLI and Terraform are configured as an easy to consume [Development Container](https://code.visualstudio.com/docs/remote/containers). To use this, install the [Remote Development Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack) and then follow [these instructions](https://code.visualstudio.com/docs/remote/containers#_quick-start-open-an-existing-folder-in-a-container) for opening the workspace in the containerized environment.
 
 ### Option 1 - Install with pip
 
@@ -92,7 +93,6 @@ This application can be easily deployed to Azure using Terraform by following th
 
 #### Azure Function Prerequisites
 - VSCode
-- [Visual Studio Code Remote - Containers extension](https://code.visualstudio.com/docs/remote/containers)
 - [Azure Blob Storage Account](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-create-account-block-blob?tabs=azure-portal)
 - [Keyvault Resource](https://docs.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal#create-a-vault)
 - A [secret](https://docs.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal#add-a-secret-to-key-vault) containing the value of your PAT token.
@@ -106,30 +106,27 @@ cd git-insights
 pip install -r requirements.txt && pip install -r requirements-dev.txt
 ```
 
-2. Within Visual Studio Code, open up the project folder as a new Dev Container which will setup the Azure Function Extension and your local python environment.
-![](https://code.visualstudio.com/assets/docs/remote/containers/dev-container-progress.png)
-
-3. Once the Azure extension is installed, sign into your Azure account by navigating to the Azure explorer, select Sign in to Azure under Functions, and follow the prompts in the browser.
+2. Once the Azure extension is installed, sign into your Azure account by navigating to the Azure explorer, select Sign in to Azure under Functions, and follow the prompts in the browser.
 ![](https://docs.microsoft.com/en-us/azure/developer/python/media/tutorial-vs-code-serverless-python/azure-sign-in.png)
 
 After signing in, verify that the status bar says Azure: Signed In and your subscription(s) appears in the Azure explorer:
 
 ![](https://docs.microsoft.com/en-us/azure/developer/python/media/tutorial-vs-code-serverless-python/azure-account-status-bar.png)
 
-4. To verify that all the Azure Functions tools are installed, open the Visual Studio Code Command Palette (F1), select the Terminal: Create New Integrated Terminal command, and once the terminal opens, run the command `func`
+3. To verify that all the Azure Functions tools are installed, open the Visual Studio Code Command Palette (F1), select the Terminal: Create New Integrated Terminal command, and once the terminal opens, run the command `func`
 
 ![](https://docs.microsoft.com/en-us/azure/developer/python/media/tutorial-vs-code-serverless-python/check-azure-functions-tools-prerequisites-in-visual-studio-code.png)
 
-5. Configuration Setup
+4. Configuration Setup
 - Rename `local.settings.json.template` -> `local.settings.json`
 - Provide the Azure storage account's primary connection string for both the `gitinsights_STORAGE` and `AzureWebJobsStorage` settings.
 - Provide the service principal credentials for the following settings: `AZURE_CLIENT_SECRET`, `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, `AZURE_SUBSCRIPTION_ID`
 - Provide the keyvault name for the `KeyvaultName` setting, and the secret containing the PAT token for the `PatSecretName` setting
 - Provide the ADO organization name, project name, repositories (comma delimited for multiple) and backlog [team name](https://docs.microsoft.com/en-us/azure/devops/organizations/settings/add-teams?bc=%2Fazure%2Fdevops%2Fboards%2Fbreadcrumb%2Ftoc.json&toc=%2Fazure%2Fdevops%2Fboards%2Ftoc.json&view=azure-devops&tabs=preview-page).
 
-6. Set a breakpoint in the code and hit F5 to debug locally.
+5. Set a breakpoint in the code and hit F5 to debug locally.
 
-7. The function will write the results to your blob storage account prior to completion.
+6. The function will write the results to your blob storage account prior to completion.
 
 _JFYI_: This particular Azure Function is scheduled to run every friday at 9AM. Edit [`functions.json`](./gitinsights/function.json) if you'd like to change the [NCRONTAB schedule](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=csharp#ncrontab-examples).
 
