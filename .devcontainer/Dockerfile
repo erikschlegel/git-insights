@@ -8,3 +8,5 @@ ARG TERRAFORM_VERSION=0.13.5
 RUN wget -O /tmp/terraform.zip \
     https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 RUN unzip -d /usr/local/bin/ /tmp/terraform.zip && rm /tmp/terraform.zip
+
+RUN python -m venv .venv && . .venv/bin/activate
