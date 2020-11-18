@@ -80,7 +80,7 @@ This SDK can be used either through the pip package or as an Azure Function.
 ### Option 1 - Install with pip
 
 ```
-pip install git-insights
+pip install gitinsights
 ```
 
 ### Option 2 - Setup local Azure Function environment
