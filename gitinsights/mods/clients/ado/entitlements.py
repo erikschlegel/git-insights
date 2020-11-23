@@ -3,7 +3,7 @@ from typing import List
 
 from requests import Response
 
-from gitinsights.mods.managers.repo_insights_base import ApiClient
+from ...managers.repo_insights_base import ApiClient
 
 
 # We need to fetch the org profiles to account for local git profile <> ADO profile discrepencies

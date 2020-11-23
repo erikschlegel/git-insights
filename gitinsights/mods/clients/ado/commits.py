@@ -7,8 +7,8 @@ from typing import Tuple
 from dateutil import parser
 from requests import Response
 
-from gitinsights.mods.managers.repo_insights_base import ApiClient
-from gitinsights.mods.managers.repo_insights_base import RepoInsightsManager
+from ...managers.repo_insights_base import ApiClient
+from ...managers.repo_insights_base import RepoInsightsManager
 
 
 class AdoPullRequestCommitsClient(ApiClient):
@@ -50,6 +50,7 @@ class AdoPullRequestCommitsClient(ApiClient):
             self.commitChangeCounts[repo] = self.getAllCommitsByRepo(repo, project)
 
         repoCommitChangeCounts = self.commitChangeCounts[repo]
+        contributor: str
 
         if len(repoCommitChangeCounts) == 0:
             raise ValueError('Repo commit change counts are empty')
@@ -64,13 +65,15 @@ class AdoPullRequestCommitsClient(ApiClient):
 
             # If the alias cannot be located in the registry then skip the commits from being included and ask the engineer to setup their local profile using their microsoft email.
             if authorAlias not in entitlements:
-                logging.warning('Alias %s for commit %s has not contributed directly to any previous pull requests and cannot be found', authorAlias, commit['commitId'])
-                continue
+                logging.warning('Alias %s for commit %s has not contributed directly to any previous pull requests and cannot be found. Please configure the profileAliases setting with this commit email address.', authorAlias, commit['commitId'])
+                contributor = authorAlias
+            else:
+                contributor = entitlements[authorAlias]
 
             recordList.append(
                 {
                     **self.reportableFieldDefaults, **{
-                        'contributor': entitlements[authorAlias],
+                        'contributor': contributor,
                         'week': parser.parse(commit['author']['date']).strftime("%V"),
                         'pr_commits_pushed': 1,
                         'commit_change_count_edits': repoCommitChangeCounts[commit['commitId']]['Edit'],

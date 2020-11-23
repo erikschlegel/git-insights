@@ -4,8 +4,8 @@ from typing import List
 from dateutil import parser
 from requests import Response
 
-from gitinsights.mods.managers.repo_insights_base import ApiClient
-from gitinsights.mods.managers.repo_insights_base import RepoInsightsManager
+from ...managers.repo_insights_base import ApiClient
+from ...managers.repo_insights_base import RepoInsightsManager
 
 
 class AdoPullRequestReviewCommentsClient(ApiClient):

@@ -4,12 +4,12 @@ from typing import List
 
 import numpy as np
 
-from gitinsights.mods.clients.ado.comments import AdoPullRequestReviewCommentsClient
-from gitinsights.mods.clients.ado.commits import AdoPullRequestCommitsClient
-from gitinsights.mods.clients.ado.entitlements import AdoGetOrgEntitlementsClient
-from gitinsights.mods.clients.ado.pull_request import AdoPullRequestsClient
-from gitinsights.mods.clients.ado.workitems import AdoGetProjectWorkItemsClient
-from gitinsights.mods.managers.repo_insights_base import RepoInsightsManager
+from ...mods.clients.ado.comments import AdoPullRequestReviewCommentsClient
+from ...mods.clients.ado.commits import AdoPullRequestCommitsClient
+from ...mods.clients.ado.entitlements import AdoGetOrgEntitlementsClient
+from ...mods.clients.ado.pull_request import AdoPullRequestsClient
+from ...mods.clients.ado.workitems import AdoGetProjectWorkItemsClient
+from ...mods.managers.repo_insights_base import RepoInsightsManager
 
 BASE_URI = 'dev.azure.com'
 DEFAULT_VERSION = '6.0'
