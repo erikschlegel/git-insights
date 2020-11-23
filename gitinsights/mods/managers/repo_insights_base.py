@@ -100,11 +100,12 @@ class ApiClient(abc.ABC):
 
     def uri(self, resourcePath: str, parameters: Dict[str, str]) -> str:
         uri_str = "https://{}/{}?".format(self.baseUrl, resourcePath)
-        if 'version' not in parameters:
-            parameters['version'] = self.version
+        if 'api-version' not in parameters:
+            parameters['api-version'] = self.version
 
-        for paramName, value in parameters.items():
-            uri_str += "&{}={}".format(paramName, value)
+        for i, (paramName, value) in enumerate(parameters.items()):
+            delimiter = "&" if not i == 0 else ""
+            uri_str += "{}{}={}".format(delimiter, paramName, value)
 
         return uri_str
 

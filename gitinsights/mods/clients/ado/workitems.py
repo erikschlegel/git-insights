@@ -5,8 +5,8 @@ import numpy as np
 from dateutil import parser
 from requests import Response
 
-from gitinsights.mods.managers.repo_insights_base import ApiClient
-from gitinsights.mods.managers.repo_insights_base import RepoInsightsManager
+from ...managers.repo_insights_base import ApiClient
+from ...managers.repo_insights_base import RepoInsightsManager
 
 
 class AdoGetProjectWorkItemsClient(ApiClient):
@@ -16,6 +16,7 @@ class AdoGetProjectWorkItemsClient(ApiClient):
 
         wiQLQuery = "Select [System.Id] From WorkItems Where [System.WorkItemType] = 'User Story' AND [State] <> 'Removed'"
         uri_parameters: Dict[str, str] = {}
+        uri_parameters['api-version'] = "6.0"
         project: str = kwargs['project']
         teamId: str = kwargs['teamId']
         repo: str = kwargs['repo']
@@ -49,7 +50,7 @@ class AdoGetProjectWorkItemsClient(ApiClient):
 
         uri_parameters: Dict[str, str] = {}
         uri_parameters['ids'] = ','.join(workItemIds)
-        uri_parameters['version'] = "6.0"
+        uri_parameters['api-version'] = "6.0"
 
         resourcePath = "{}/{}/_apis/wit/workitems".format(self.organization, project)
 
