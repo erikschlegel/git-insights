@@ -5,8 +5,8 @@ import os
 
 import azure.functions as func
 
-from .mods.ado_client import AzureDevopsInsights
 from .mods.kv_client import KeyvaultClient
+from .mods.managers.ado import AzureDevopsClientManager
 
 
 def main(mytimer: func.TimerRequest, outputBlob: func.Out[func.InputStream]) -> None:
@@ -36,8 +36,8 @@ def main(mytimer: func.TimerRequest, outputBlob: func.Out[func.InputStream]) -> 
     if mytimer.past_due:
         logging.info('The timer is past due!')
 
-    client = AzureDevopsInsights(adoOrg, adoProject, repos.split(','), teamId, aliasDict)
-    dataframe = client.aggregatePullRequestActivity(groupByColumns, patToken.value)
+    client = AzureDevopsClientManager(adoOrg, adoProject, repos.split(','), teamId, patToken.value, aliasDict)
+    dataframe = client.aggregatePullRequestActivity(groupByColumns)
     outputBlob.set(dataframe.to_csv(index=True))
 
     logging.info('Python timer trigger function ran at %s', utc_timestamp)

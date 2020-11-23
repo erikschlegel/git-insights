@@ -75,7 +75,7 @@ This SDK can be used either through the pip package or as an Azure Function.
 
 **Prerequisites**
 - An Azure Subscription
-- An [ADO PAT Token](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page#create-a-pat) with read permissions
+- An [ADO PAT Token](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page#create-a-pat) with read permissions scoped to Code, Work Items and Graph.
 - An ADO organization, project, repo(s) and a backlog team
 - All project dependencies such as Python, Azure Functions CLI and Terraform are configured as an easy to consume [Development Container](https://code.visualstudio.com/docs/remote/containers). To use this, install the [Remote Development Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack) and then follow [these instructions](https://code.visualstudio.com/docs/remote/containers#_quick-start-open-an-existing-folder-in-a-container) for opening the workspace in the containerized environment.
 
@@ -135,7 +135,7 @@ _JFYI_: This particular Azure Function is scheduled to run every friday at 9AM. 
 ### Example
 
 ```python
-from gitinsights.mods.ado_client import AzureDevopsInsights
+from gitinsights.mods.managers.ado import AzureDevopsClientManager
 
 adoProject = "Seinfeld-Trivia"
 adoOrg = "Best-Shows"
@@ -145,8 +145,8 @@ patToken = "Kramers-secret"
 
 groupByColumns = ['contributor', 'week', 'repo']
 
-client = AzureDevopsInsights(adoOrg, adoProject, repos, teamId)
-dataframe = client.aggregatePullRequestActivity(groupByColumns, patToken)
+client = AzureDevopsClientManager(adoOrg, adoProject, repos, teamId, patToken)
+dataframe = client.aggregatePullRequestActivity(groupByColumns)
 
 print(dataframe)
 ```

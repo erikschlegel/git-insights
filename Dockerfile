@@ -26,8 +26,5 @@ RUN echo "Running setup tools..." \
 RUN echo "Running mypy static analysis tool..." \
     && mypy gitinsights
 
-RUN echo "Running unit tests..." \
-    && pytest gitinsights
-
 # executes code coverage upload to codecov.io
 CMD ["/bin/bash", "-c", "bash <(curl -s https://codecov.io/bash)"]
