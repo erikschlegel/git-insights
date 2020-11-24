@@ -43,7 +43,7 @@ Now that the remote state container is configured it is possible to deploy the i
 
 > **Note**: ensure that the [required environment variables](./git-insights/.env.template) are properly configuredInstructions for setting `ARM_ACCESS_KEY`, `ARM_ACCOUNT_NAME`, `ARM_CONTAINER_NAME` are described above.
 >
-> Also, provide the [required terraform variables](./git-insights/config.tfvars.template) with setting `profile_aliases`, `project_name`, `org_name`, `repo_names`, `backlog_team_name`, `token`.
+> Also, provide the [required terraform variables](./git-insights/config.tfvars.template) with setting `profile_aliases(i.e. {"cosmo@kramerica.com": "Cosmo Kramer"})`, `project_name`, `org_name`, `repo_names`, `backlog_team_name`, `token`.
 
 ```bash
 cd git-insights
