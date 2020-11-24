@@ -137,3 +137,4 @@ local.settings.json
 .terraform/
 terraform.tfstate*
 .terraform*
+config.tfvars

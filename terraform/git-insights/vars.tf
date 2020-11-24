@@ -20,13 +20,27 @@ variable "token" {
   description = "Token used to authenticate with git hosting service (ADO, GitHub, GitLab)."
 }
 
-variable "ado_config" {
-  type = object({
-    project_name      = string,
-    org_name          = string,
-    repo_names        = list(string),
-    backlog_team_name = string,
-    profile_aliases   = map(string)
-  })
-  description = "Azure DevOps configuration. repo_names should be comma-delimited. profile_aliases should be a map of key value pairs for alias overrides."
+variable "project_name" {
+  type        = string
+  description = "SCM project name."
+}
+
+variable "org_name" {
+  type        = string
+  description = "SCM organization name."
+}
+
+variable "repo_names" {
+  type        = list(string)
+  description = "SCM repository names."
+}
+
+variable "backlog_team_name" {
+  type        = string
+  description = "ADO backlog team name."
+}
+
+variable "profile_aliases" {
+  type        = map(string)
+  description = "Profile alias name overlay to account for discrepencies between SCM profile alias and local git profile."
 }

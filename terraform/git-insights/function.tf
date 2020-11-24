@@ -41,10 +41,10 @@ resource "azurerm_function_app" "func" {
     KeyvaultName : azurerm_key_vault.kv.name
     PatSecretName : azurerm_key_vault_secret.token.name
 
-    AdoRepos : join(",", var.ado_config.repo_names)
-    AdoOrgName : var.ado_config.org_name
-    BacklogTeamId : var.ado_config.backlog_team_name
-    AdoProjectName : var.ado_config.project_name
-    ProfileAliases : jsonencode(var.ado_config.profile_aliases)
+    AdoRepos : join(",", var.repo_names)
+    AdoOrgName : var.org_name
+    BacklogTeamId : var.backlog_team_name
+    AdoProjectName : var.project_name
+    ProfileAliases : jsonencode(var.profile_aliases)
   }
 }

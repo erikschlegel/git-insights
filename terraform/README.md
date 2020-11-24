@@ -42,14 +42,16 @@ cd ..
 Now that the remote state container is configured it is possible to deploy the infrastructure:
 
 > **Note**: ensure that the [required environment variables](./git-insights/.env.template) are properly configuredInstructions for setting `ARM_ACCESS_KEY`, `ARM_ACCOUNT_NAME`, `ARM_CONTAINER_NAME` are described above.
+>
+> Also, provide the [required terraform variables](./git-insights/config.tfvars.template) with setting `profile_aliases`, `project_name`, `org_name`, `repo_names`, `backlog_team_name`, `token`.
 
 ```bash
 cd git-insights
 terraform init \
     -backend-config "storage_account_name=${ARM_ACCOUNT_NAME}" \
     -backend-config "container_name=${ARM_CONTAINER_NAME}"
-terraform plan
-terraform apply
+terraform plan -var-file="config.tfvars"
+terraform apply -var-file="config.tfvars"
 
 # capture function name for deployment
 FUNCTION_NAME=$(terraform output function-name)

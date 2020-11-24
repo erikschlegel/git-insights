@@ -139,7 +139,7 @@ from gitinsights.mods.managers.ado import AzureDevopsClientManager
 
 adoProject = "Seinfeld-Trivia"
 adoOrg = "Best-Shows"
-repos = ["Tales-of-Kramer"]
+repos = ["a-repo-about-nothing"]
 teamId = "Team LD"
 patToken = "Kramers-secret"
 
