@@ -181,6 +181,7 @@ class Test_ADOPrStatService(TestCase):
         self.assertEqual(agg.loc['44', 'user_stories_assigned'], 2)
         self.assertEqual(agg.loc['44', 'user_stories_completed'], 1)
         self.assertEqual(agg.loc['44', 'user_story_points_assigned'], 12)
+        self.assertEqual(int(agg.loc['44', 'user_story_initial_pr_submission_days']), 2)
         self.assertEqual(agg.loc['44', 'user_story_completion_days'], 1)
         self.assertEqual(agg.loc['44', 'user_stories_created'], 3)
 
@@ -216,5 +217,6 @@ class Test_ADOPrStatService(TestCase):
         self.assertEqual(agg.loc['44', 'user_stories_assigned'], 2)
         self.assertEqual(agg.loc['44', 'user_stories_completed'], 1)
         self.assertEqual(agg.loc['44', 'user_story_points_assigned'], 12)
+        self.assertEqual(int(agg.loc['44', 'user_story_initial_pr_submission_days']), 2)
         self.assertEqual(agg.loc['44', 'user_story_completion_days'], 1)
         self.assertEqual(agg.loc['44', 'user_stories_created'], 3)

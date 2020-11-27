@@ -68,6 +68,7 @@
 | `user_story_points_completed`  | Sum of completed story points | `int` |
 | `user_story_completion_days`  | Mean Average duration for user story completion (_ie days diff between story assignment and completion date_) | `float` |
 | `user_stories_created`  | Sum of user stories created | `int` |
+| `user_story_initial_pr_submission_days`  | Mean average of elapsed time between the datetime of a user story activated date and the initial pull request submission date. | `float` |
 
 ## Installation
 
