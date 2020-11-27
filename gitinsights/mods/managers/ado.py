@@ -47,7 +47,8 @@ class AzureDevopsClientManager(RepoInsightsManager):
                 'user_story_points_assigned': {'default': 0, 'agg_function': 'sum'},
                 'user_story_points_completed': {'default': 0, 'agg_function': 'sum'},
                 'user_story_completion_days': {'default': np.nan, 'agg_function': 'mean'},
-                'user_stories_created': {'default': 0, 'agg_function': 'sum'}
+                'user_stories_created': {'default': 0, 'agg_function': 'sum'},
+                'user_story_initial_pr_submission_days': {'default': np.nan, 'agg_function': 'mean'}
             }
 
     @property

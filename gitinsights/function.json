@@ -7,7 +7,7 @@
       "direction": "in",
       "useMonitor": true,
       "schedule": "0 0 9 * * Fri",
-      "runOnStartup": false
+      "runOnStartup": true
     },
     {
       "type": "blob",
