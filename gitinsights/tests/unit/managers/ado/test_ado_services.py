@@ -1,4 +1,5 @@
 import json
+import math
 import os
 from typing import List
 from typing import Set
@@ -43,6 +44,7 @@ class Test_ADOPrStatService(TestCase):
         self.mockedWorkitemListResponse = loadMockFile("./data/workitemList.json")
         self.mockedWorkitemDetailsResponse = loadMockFile("./data/workitemDetails.json")
         self.mockedEntitlementReponse = loadMockFile("./data/entitlements.json")
+        self.mockedPrSubmissionFromWorkitemResponse = loadMockFile("./data/prSubmissionDateValidation.json")
         self.clientManager = AzureDevopsClientManager("myorg", "my-super-project", ["repo1"], "team-buffalo", "token-1")
 
     def get_mocked_reponse_side_effects(self, clients: Set[str]) -> List[Response]:
@@ -126,10 +128,28 @@ class Test_ADOPrStatService(TestCase):
         with self.assertRaises(ValueError):
             client.getDeserializedDataset(project=self.clientManager.project)
 
-        self.assertEqual(len(response), 5)
+        self.assertEqual(len(response), 7)
         self.assertEqual(aggregateColumn(response, 'user_stories_created'), 3)
         self.assertEqual(aggregateColumn(response, 'user_stories_assigned'), 2)
         self.assertEqual(aggregateColumn(response, 'user_stories_completed'), 1)
+
+    @patch('gitinsights.mods.managers.repo_insights_base.requests.get')
+    @patch('gitinsights.mods.managers.repo_insights_base.requests.post')
+    def test_pr_submission_days(self, mock_post, mock_get):
+        mock_get.return_value.json.return_value = self.mockedPrSubmissionFromWorkitemResponse
+        mock_post.return_value.json.return_value = self.mockedWorkitemListResponse
+        # pylint: disable=protected-access
+        client = AdoGetProjectWorkItemsClient("myorg", "dev.azure.com", "6.0", "", self.clientManager._reportableFieldDefaults)
+        response = client.getDeserializedDataset(repo="repo1", project=self.clientManager.project, teamId=self.clientManager.teamId)
+
+        with self.assertRaises(ValueError):
+            client.getDeserializedDataset(project=self.clientManager.project)
+
+        self.assertEqual(len(response), 3)
+
+        for record in response:
+            if 'user_story_initial_pr_submission_days' in record and not math.isnan(record['user_story_initial_pr_submission_days']):
+                self.assertEqual(math.floor(record['user_story_initial_pr_submission_days']), 13)
 
     @patch('gitinsights.mods.clients.ado.entitlements.AdoGetOrgEntitlementsClient.GetResponse')
     @patch('gitinsights.mods.clients.ado.pull_request.AdoPullRequestsClient.GetResponse')
@@ -148,7 +168,7 @@ class Test_ADOPrStatService(TestCase):
         entitlementsMock.return_value.json.return_value = self.mockedEntitlementReponse
 
         dataframe = self.clientManager.collectPullRequestActivity()
-        self.assertEqual(len(dataframe), 54)
+        self.assertEqual(len(dataframe), 56)
 
     @patch('gitinsights.mods.clients.ado.entitlements.AdoGetOrgEntitlementsClient.GetResponse')
     @patch('gitinsights.mods.clients.ado.pull_request.AdoPullRequestsClient.GetResponse')

@@ -1,0 +1,375 @@
+{
+    "count": 1,
+    "value": [
+        {
+            "id": 1428,
+            "rev": 40,
+            "fields": {
+                "System.AreaPath": "Adams",
+                "System.TeamProject": "Adams",
+                "System.IterationPath": "Adams\\MLOps\\Sprint 11",
+                "System.WorkItemType": "User Story",
+                "System.State": "Closed",
+                "System.Reason": "Acceptance tests pass",
+                "System.AssignedTo": {
+                    "displayName": "Mike Jones",
+                    "url": "https://spsprodcca1.vssps.visualstudio.com/A166226dc-5f75-4379-be1e-b0bcd68e4247/_apis/Identities/53a20a1f--bcc7-40fd386e10b3",
+                    "_links": {
+                        "avatar": {
+                            "href": "https://dev.azure.com/fabrikam/_apis/GraphProfile/MemberAvatars/aad."
+                        }
+                    },
+                    "id": "53a20a1f-50d3-6f68-bcc7-40fd386e10b3",
+                    "uniqueName": "jones@gmail.com",
+                    "imageUrl": "https://dev.azure.com/fabrikam/_apis/GraphProfile/MemberAvatars/aad.",
+                    "descriptor": "aad.NTNhMjBhMWYtNTBkMy03ZjY4LWJjYzctNDBmZDM4NmUxMGIz"
+                },
+                "System.CreatedDate": "2020-10-11T16:26:41.497Z",
+                "System.CreatedBy": {
+                    "displayName": "Ron Wolf",
+                    "url": "https://spsprodcca1.vssps.visualstudio.com/A166226dc-5f75-4379-be1e-b0bcd68e4247/_apis/Identities/-7af5-6861-bfa3-a5f5a9d88301",
+                    "_links": {
+                        "avatar": {
+                            "href": "https://dev.azure.com/fabrikam/_apis/GraphProfile/MemberAvatars/aad."
+                        }
+                    },
+                    "id": "5d4843ce-7af5-6861-bfa3-a5f5a9d88301",
+                    "uniqueName": "rwolf@gmail.com",
+                    "imageUrl": "https://dev.azure.com/fabrikam/_apis/GraphProfile/MemberAvatars/aad.",
+                    "descriptor": "aad.NWQ0ODQzY2UtN2FmNS03ODYxLWJmYTMtYTVmNWE5ZDg4MzAx"
+                },
+                "System.ChangedDate": "2020-12-07T15:38:56.75Z",
+                "System.ChangedBy": {
+                    "displayName": "Mike Johnson",
+                    "url": "https://spsprodcca1.vssps.visualstudio.com/A166226dc-5f75-4379-be1e-b0bcd68e4247/_apis/Identities/8-9e23-8f5545aeb4b1",
+                    "_links": {
+                        "avatar": {
+                            "href": "https://dev.azure.com/fabrikam/_apis/GraphProfile/MemberAvatars/aad."
+                        }
+                    },
+                    "id": "80c73e10-0e63-6c7f-9e23-8f5545aeb4b1",
+                    "uniqueName": "johnson@gmail.com",
+                    "imageUrl": "https://dev.azure.com/fabrikam/_apis/GraphProfile/MemberAvatars/aad",
+                    "descriptor": "aad.ODBjNzNlMTAtMGU2My03YzdmLTllMjMtOGY1NTQ1YWViNGIx"
+                },
+                "System.CommentCount": 6,
+                "System.Title": "Combine all Stage 1 aggregations into single output",
+                "System.BoardColumn": "Closed",
+                "System.BoardColumnDone": false,
+                "System.BoardLane": "DataOps",
+                "Microsoft.VSTS.Scheduling.StoryPoints": 16.0,
+                "Microsoft.VSTS.Common.StateChangeDate": "2020-12-07T15:38:56.75Z",
+                "Microsoft.VSTS.Common.ActivatedDate": "2020-11-19T15:19:59.933Z",
+                "Microsoft.VSTS.Common.ActivatedBy": {
+                    "displayName": "Mike Jones",
+                    "url": "https://spsprodcca1.vssps.visualstudio.com/A166226dc-5f75-4379-be1e-b0bcd68e4247/_apis/Identities/53a20a1f-50d3-6f68-bcc7-40fd386e10b3",
+                    "_links": {
+                        "avatar": {
+                            "href": "https://dev.azure.com/fabrikam/_apis/GraphProfile/MemberAvatars/aad.NTNhMjBhMWYtNTBkMy03ZjY4LWJjYzctNDBmZDM4NmUxMGIz"
+                        }
+                    },
+                    "id": "53a20a1f-50d3-6f68-bcc7-40fd386e10b3",
+                    "uniqueName": "jones@gmail.com",
+                    "imageUrl": "https://dev.azure.com/fabrikam/_apis/GraphProfile/MemberAvatars/aad.NTNhMjBhMWYtNTBkMy03ZjY4LWJjYzctNDBmZDM4NmUxMGIz",
+                    "descriptor": "aad.NTNhMjBhMWYtNTBkMy03ZjY4LWJjYzctNDBmZDM4NmUxMGIz"
+                },
+                "Microsoft.VSTS.Common.ResolvedDate": "2020-12-02T22:35:17.4Z",
+                "Microsoft.VSTS.Common.ResolvedBy": {
+                    "displayName": "Mike Jones",
+                    "url": "https://spsprodcca1.vssps.visualstudio.com/A166226dc-5f75-4379-be1e-b0bcd68e4247/_apis/Identities/53a20a1f-50d3-6f68-bcc7-40fd386e10b3",
+                    "_links": {
+                        "avatar": {
+                            "href": "https://dev.azure.com/fabrikam/_apis/GraphProfile/MemberAvatars/aad.NTNhMjBhMWYtNTBkMy03ZjY4LWJjYzctNDBmZDM4NmUxMGIz"
+                        }
+                    },
+                    "id": "53a20a1f-50d3-6f68-bcc7-40fd386e10b3",
+                    "uniqueName": "jones@gmail.com",
+                    "imageUrl": "https://dev.azure.com/fabrikam/_apis/GraphProfile/MemberAvatars/aad.NTNhMjBhMWYtNTBkMy03ZjY4LWJjYzctNDBmZDM4NmUxMGIz",
+                    "descriptor": "aad.NTNhMjBhMWYtNTBkMy03ZjY4LWJjYzctNDBmZDM4NmUxMGIz"
+                },
+                "Microsoft.VSTS.Common.ClosedDate": "2020-12-07T15:38:56.75Z",
+                "Microsoft.VSTS.Common.ClosedBy": {
+                    "displayName": "Mike Johnson",
+                    "url": "https://spsprodcca1.vssps.visualstudio.com/A166226dc-5f75-4379-be1e-b0bcd68e4247/_apis/Identities/-0e63-6c7f-9e23",
+                    "_links": {
+                        "avatar": {
+                            "href": "https://dev.azure.com/fabrikam/_apis/GraphProfile/MemberAvatars/aad."
+                        }
+                    },
+                    "id": "80c73e10-0e63-6c7f-9e23-8f5545aeb4b1",
+                    "uniqueName": "johnson@gmail.com",
+                    "imageUrl": "https://dev.azure.com/fabrikam/_apis/GraphProfile/MemberAvatars/aad.",
+                    "descriptor": "aad.ODBjNzNlMTAtMGU2My03YzdmLTllMjMtOGY1NTQ1YWViNGIx"
+                },
+                "Microsoft.VSTS.Common.Priority": 2,
+                "Microsoft.VSTS.Common.StackRank": 1999123486.0,
+                "Microsoft.VSTS.Common.ValueArea": "Business",
+                "WEF_CEF3E7CF42EB403E9C28F80D32D56131_Kanban.Column": "Closed",
+                "WEF_CEF3E7CF42EB403E9C28F80D32D56131_Kanban.Column.Done": false,
+                "WEF_CEF3E7CF42EB403E9C28F80D32D56131_Kanban.Lane": "DataOps",
+                "System.Description": "<div><span style=\"display:inline !important;\">.</span></div></div>",
+                "Microsoft.VSTS.Common.AcceptanceCriteria": "<div>At end of the story, we:</div><div><span><br></span></div><div><span><ul><li><span></span></div>",
+                "System.Tags": "data prep; dataops",
+                "System.Parent": 1038
+            },
+            "relations": [
+                {
+                    "rel": "System.LinkTypes.Related",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1400",
+                    "attributes": {
+                        "isLocked": false,
+                        "comment": "Ron Wolf mentioned work item #1400 in #1428",
+                        "name": "Related"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Hierarchy-Forward",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1647",
+                    "attributes": {
+                        "isLocked": false,
+                        "name": "Child"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Related",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1608",
+                    "attributes": {
+                        "isLocked": false,
+                        "comment": "Test Comment",
+                        "name": "Related"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Related",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1615",
+                    "attributes": {
+                        "isLocked": false,
+                        "comment": "Test Comment",
+                        "name": "Related"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Hierarchy-Forward",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1646",
+                    "attributes": {
+                        "isLocked": false,
+                        "name": "Child"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Hierarchy-Forward",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1648",
+                    "attributes": {
+                        "isLocked": false,
+                        "name": "Child"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Hierarchy-Forward",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1722",
+                    "attributes": {
+                        "isLocked": false,
+                        "name": "Child"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Related",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1397",
+                    "attributes": {
+                        "isLocked": false,
+                        "comment": "Test Comment",
+                        "name": "Related"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Related",
+                    "url": "https://dev.azure.com/fabrikam/-e44e-4825-92ea--/_apis/wit/workItems/1398",
+                    "attributes": {
+                        "isLocked": false,
+                        "comment": "Test Comment",
+                        "name": "Related"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Related",
+                    "url": "https://dev.azure.com/fabrikam/-e44e-4825--/_apis/wit/workItems/1600",
+                    "attributes": {
+                        "isLocked": false,
+                        "comment": "Test Comment",
+                        "name": "Related"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Related",
+                    "url": "https://dev.azure.com/fabrikam/-e44e-4825-92ea--/_apis/wit/workItems/1602",
+                    "attributes": {
+                        "isLocked": false,
+                        "comment": "Test Comment",
+                        "name": "Related"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Related",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825/_apis/wit/workItems/1399",
+                    "attributes": {
+                        "isLocked": false,
+                        "comment": "Test Comment",
+                        "name": "Related"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Hierarchy-Forward",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92e/_apis/wit/workItems/1720",
+                    "attributes": {
+                        "isLocked": false,
+                        "name": "Child"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Hierarchy-Forward",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92e/_apis/wit/workItems/1721",
+                    "attributes": {
+                        "isLocked": false,
+                        "name": "Child"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Related",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea/_apis/wit/workItems/1093",
+                    "attributes": {
+                        "isLocked": false,
+                        "comment": "Ron Wolf mentioned work item #1093 in #1428",
+                        "name": "Related"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Related",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1291",
+                    "attributes": {
+                        "isLocked": false,
+                        "comment": "Test Comment",
+                        "name": "Related"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Related",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1612",
+                    "attributes": {
+                        "isLocked": false,
+                        "comment": "Test Comment",
+                        "name": "Related"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Related",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1606",
+                    "attributes": {
+                        "isLocked": false,
+                        "comment": "Test Comment",
+                        "name": "Related"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Related",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1614",
+                    "attributes": {
+                        "isLocked": false,
+                        "comment": "Test Comment",
+                        "name": "Related"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Hierarchy-Forward",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1759",
+                    "attributes": {
+                        "isLocked": false,
+                        "name": "Child"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Hierarchy-Forward",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1719",
+                    "attributes": {
+                        "isLocked": false,
+                        "name": "Child"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Hierarchy-Reverse",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1038",
+                    "attributes": {
+                        "isLocked": false,
+                        "name": "Parent"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Related",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1607",
+                    "attributes": {
+                        "isLocked": false,
+                        "comment": "Test Comment",
+                        "name": "Related"
+                    }
+                },
+                {
+                    "rel": "System.LinkTypes.Related",
+                    "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1601",
+                    "attributes": {
+                        "isLocked": false,
+                        "comment": "Test Comment",
+                        "name": "Related"
+                    }
+                },
+                {
+                    "rel": "ArtifactLink",
+                    "url": "vstfs:///Git/PullRequestId/52d898ff-e44e-4825-92ea--%2F2c04854b-c564-4891-bc11%2F311",
+                    "attributes": {
+                        "authorizedDate": "2020-11-17T21:40:28.863Z",
+                        "id": 6193724,
+                        "resourceCreatedDate": "2020-11-17T21:40:28.863Z",
+                        "resourceModifiedDate": "2020-11-17T21:40:28.863Z",
+                        "revisedDate": "9999-01-01T00:00:00Z",
+                        "name": "Pull Request"
+                    }
+                },
+                {
+                    "rel": "ArtifactLink",
+                    "url": "vstfs:///Git/Commit/52d898ff-e44e-4825-92ea--%2f2c04854b-c564-4891-bc11-22fa74f76d81",
+                    "attributes": {
+                        "authorizedDate": "2020-11-20T18:02:20.733Z",
+                        "id": 6213020,
+                        "resourceCreatedDate": "2020-11-20T18:02:20.733Z",
+                        "resourceModifiedDate": "2020-11-20T18:02:20.733Z",
+                        "revisedDate": "9999-01-01T00:00:00Z",
+                        "name": "Fixed in Commit"
+                    }
+                },
+                {
+                    "rel": "ArtifactLink",
+                    "url": "vstfs:///Git/Commit/52d898ff-e44e-4825-92ea--%2f2c04854b-c564-4891-bc11-22fa74f76d81",
+                    "attributes": {
+                        "authorizedDate": "2020-12-05T02:36:55.333Z",
+                        "id": 6296350,
+                        "resourceCreatedDate": "2020-12-05T02:36:55.333Z",
+                        "resourceModifiedDate": "2020-12-05T02:36:55.333Z",
+                        "revisedDate": "9999-01-01T00:00:00Z",
+                        "name": "Fixed in Commit"
+                    }
+                },
+                {
+                    "rel": "ArtifactLink",
+                    "url": "vstfs:///Git/PullRequestId/52d898ff-e44e-4825-92ea--%2F2c04854b-c564-4891%2F335",
+                    "attributes": {
+                        "authorizedDate": "2020-12-03T05:29:35.69Z",
+                        "id": 6282894,
+                        "resourceCreatedDate": "2020-12-03T05:29:35.69Z",
+                        "resourceModifiedDate": "2020-12-03T05:29:35.69Z",
+                        "revisedDate": "9999-01-01T00:00:00Z",
+                        "name": "Pull Request"
+                    }
+                }
+            ],
+            "url": "https://dev.azure.com/fabrikam/52d898ff-e44e-4825-92ea--/_apis/wit/workItems/1428"
+        }
+    ]
+}

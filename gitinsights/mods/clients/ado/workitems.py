@@ -1,5 +1,6 @@
 from typing import Dict
 from typing import List
+from typing import Optional
 
 import numpy as np
 from dateutil import parser
@@ -10,8 +11,7 @@ from ...managers.repo_insights_base import RepoInsightsManager
 
 
 class AdoGetProjectWorkItemsClient(ApiClient):
-    @staticmethod
-    def __dateDiffBetweenPrSubmissionAndStoryActivation(workitem: dict) -> float:
+    def _dateDiffBetweenPrSubmissionAndStoryActivation(self, workitem: dict, repo: str) -> Optional[Dict]:
         # Filter for pull requests linked to the workitem
         activatedDate = parser.parse(workitem['fields']['Microsoft.VSTS.Common.ActivatedDate'])
         linkedPullRequests = list(filter(lambda relation: relation['rel'] == "ArtifactLink"
@@ -23,9 +23,16 @@ class AdoGetProjectWorkItemsClient(ApiClient):
         if len(linkedPullRequests) > 0:
             # Get the earliest submission date for workitems linked to multiple PRs
             prSubmissionDate = min((parser.parse(pr['attributes']['resourceCreatedDate']) for pr in linkedPullRequests))
-            return divmod((prSubmissionDate - activatedDate).total_seconds(), 60)[0] / 60 / 24
+            timeDelta = divmod((prSubmissionDate - activatedDate).total_seconds(), 60)[0] / 60 / 24
 
-        return np.nan
+            return {**self.reportableFieldDefaults, **{
+                    'contributor': workitem['fields']['System.AssignedTo']['displayName'],
+                    'week': prSubmissionDate.strftime("%V"),
+                    'user_story_initial_pr_submission_days': timeDelta,
+                    'repo': repo
+                    }}
+
+        return None
 
     def getDeserializedDataset(self, **kwargs) -> List[dict]:
         required_args = {'teamId', 'project', 'repo'}
@@ -89,6 +96,7 @@ class AdoGetProjectWorkItemsClient(ApiClient):
             if {'Microsoft.VSTS.Common.ActivatedDate', 'System.AssignedTo'} <= set(workitem['fields']) and workitem['fields']['System.State'] != 'New':
                 activatedDate: str = workitem['fields']['Microsoft.VSTS.Common.ActivatedDate']
                 storyStatus = workitem['fields']['System.State']
+                pullRequestSubmissionTimeDeltaFromStoryActiveDate = self._dateDiffBetweenPrSubmissionAndStoryActivation(workitem, repo)
 
                 recordList.append(
                     {**self.reportableFieldDefaults, **{
@@ -96,11 +104,13 @@ class AdoGetProjectWorkItemsClient(ApiClient):
                         'week': parser.parse(activatedDate).strftime("%V"),
                         'repo': repo,
                         'user_stories_assigned': 1,
-                        'user_story_initial_pr_submission_days': AdoGetProjectWorkItemsClient.__dateDiffBetweenPrSubmissionAndStoryActivation(workitem),
                         'user_stories_completed': 1 if storyStatus in ['Closed', 'Resolved'] else 0,
                         'user_story_points_completed': workitem['fields']['Microsoft.VSTS.Scheduling.StoryPoints'] if storyStatus in ['Closed', 'Resolved'] and 'Microsoft.VSTS.Scheduling.StoryPoints' in workitem['fields'] else 0,
                         'user_story_points_assigned': workitem['fields']['Microsoft.VSTS.Scheduling.StoryPoints'] if 'Microsoft.VSTS.Scheduling.StoryPoints' in workitem['fields'] else 0,
                         'user_story_completion_days': RepoInsightsManager.dateStrDiffInDays(workitem['fields']['Microsoft.VSTS.Common.ResolvedDate'], activatedDate) if storyStatus in ['Closed', 'Resolved'] else np.nan
                     }})
+
+                if pullRequestSubmissionTimeDeltaFromStoryActiveDate is not None:
+                    recordList.append(pullRequestSubmissionTimeDeltaFromStoryActiveDate)
 
         return recordList
