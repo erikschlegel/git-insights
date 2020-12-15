@@ -22,6 +22,7 @@ class AzureDevopsClientManager(RepoInsightsManager):
         self.pullRequestCommentsClient = AdoPullRequestReviewCommentsClient(organization, BASE_URI, DEFAULT_VERSION, patToken, self._reportableFieldDefaults)
         self.entitlementsClient = AdoGetOrgEntitlementsClient(organization, 'vssps.dev.azure.com', '5.1-preview.1', patToken, self._reportableFieldDefaults)
         self.workitemsClient = AdoGetProjectWorkItemsClient(organization, BASE_URI, DEFAULT_VERSION, patToken, self._reportableFieldDefaults)
+        self.repoPullRequestSubmitters: Dict[str, Dict[int, str]] = {}
 
         super().__init__(organization, project, repos, teamId, patToken, profileAliases)
 
@@ -58,8 +59,16 @@ class AzureDevopsClientManager(RepoInsightsManager):
     def AggregationMeasures(self) -> dict:
         return {k: v['agg_function'] for k, v in self._reportableFields.items() if v['agg_function'] is not None}
 
-    def _getRepoPullRequests(self, repo: str = None) -> List[dict]:
-        return self.pullrequestClient.getDeserializedDataset(repo=repo, project=self.project)
+    def _getRepoPullRequests(self, repo: str) -> List[dict]:
+        pullRequests = self.pullrequestClient.getDeserializedDataset(repo=repo, project=self.project)
+
+        for pr in [filtered_pr for filtered_pr in pullRequests if filtered_pr['prs_submitted'] == 1]:
+            if pr['repoId'] not in self.repoPullRequestSubmitters:
+                self.repoPullRequestSubmitters[pr['repoId']] = {}
+
+            self.repoPullRequestSubmitters[pr['repoId']][pr['pullRequestId']] = pr['contributor']
+
+        return pullRequests
 
     def _getPullRequestCommits(self, **kwargs) -> List[dict]:
         RepoInsightsManager.checkRequiredKwargs({'repo', 'entitlements', 'pullRequest'}, **kwargs)
@@ -83,7 +92,7 @@ class AzureDevopsClientManager(RepoInsightsManager):
         if len(self.repos) == 0:
             return []
 
-        return self.workitemsClient.getDeserializedDataset(teamId=self.teamId, project=self.project, repo=self.repos[0])
+        return self.workitemsClient.getDeserializedDataset(teamId=self.teamId, project=self.project, repo=self.repos[0], pullRequestSubmitters=self.repoPullRequestSubmitters)
 
     def _loadProjectEntitlements(self) -> Dict[str, str]:
         entitlementsList = self.entitlementsClient.getDeserializedDataset()

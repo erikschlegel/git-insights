@@ -6,7 +6,9 @@ from typing import Set
 import pandas as pd
 import requests
 from dateutil import parser
+from requests.adapters import HTTPAdapter
 from requests.auth import HTTPBasicAuth
+from urllib3.util.retry import Retry
 
 
 # Base Class For Git Insights
@@ -44,7 +46,7 @@ class RepoInsightsManager(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def _getRepoPullRequests(self, repo: str = None) -> List[dict]:
+    def _getRepoPullRequests(self, repo: str) -> List[dict]:
         raise NotImplementedError("Please Implement method getRepoPullRequests")
 
     @abc.abstractmethod
@@ -91,12 +93,17 @@ class RepoInsightsManager(abc.ABC):
 
 
 class ApiClient(abc.ABC):
-    def __init__(self, organization: str, baseUrl: str, version: str, patToken: str, reportableFieldDefaults: dict):
+    # pylint: disable=too-many-instance-attributes
+    def __init__(self, organization: str, baseUrl: str, version: str, patToken: str, reportableFieldDefaults: dict, retry_count: int = 3, retry_backoff_factor: float = 1, default_timeout: float = 5):
         self.organization: str = organization
         self.baseUrl = baseUrl.lstrip('https://')
         self.version = version
         self.reportableFieldDefaults = reportableFieldDefaults
         self.patToken = patToken
+        self.retry_status_force_response_codes = [429, 500, 502, 503, 504]
+        self.retry_count = retry_count
+        self.retry_backoff_factor = retry_backoff_factor
+        self.default_timeout = default_timeout
 
     def uri(self, resourcePath: str, parameters: Dict[str, str]) -> str:
         uri_str = "https://{}/{}?".format(self.baseUrl, resourcePath)
@@ -109,11 +116,28 @@ class ApiClient(abc.ABC):
 
         return uri_str
 
+    def requests_retry_session(self, session: requests.Session = None) -> requests.Session:
+        session = session or requests.Session()
+        retry = Retry(
+            total=self.retry_count,
+            read=self.retry_count,
+            connect=self.retry_count,
+            backoff_factor=self.retry_backoff_factor,
+            status_forcelist=self.retry_status_force_response_codes
+        )
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+
+        return session
+
     def sendGetRequest(self, resourcePath: str, parameters: Dict[str, str]) -> requests.Response:
-        return requests.get(self.uri(resourcePath, parameters), auth=HTTPBasicAuth('', self.patToken))
+        return self.requests_retry_session()\
+            .get(self.uri(resourcePath, parameters), auth=HTTPBasicAuth('', self.patToken), timeout=self.default_timeout)
 
     def sendPostRequest(self, resourcePath: str, postBody: Dict[str, str], parameters: Dict[str, str]) -> requests.Response:
-        return requests.post(self.uri(resourcePath, parameters), json=postBody, auth=HTTPBasicAuth('', self.patToken))
+        return self.requests_retry_session()\
+            .post(self.uri(resourcePath, parameters), json=postBody, auth=HTTPBasicAuth('', self.patToken), timeout=self.default_timeout)
 
     @abc.abstractmethod
     def getDeserializedDataset(self, **kwargs) -> List[dict]:
