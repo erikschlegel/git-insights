@@ -67,7 +67,7 @@ class Test_ADOPrStatService(TestCase):
 
         return sideEffects
 
-    @patch('gitinsights.mods.managers.repo_insights_base.requests.get')
+    @patch('gitinsights.mods.managers.repo_insights_base.requests.Session.get')
     def test_repo_pr_list(self, mock_get):
         mock_get.return_value.json.return_value = self.mockedRepoPrResponse
         # pylint: disable=protected-access
@@ -81,7 +81,7 @@ class Test_ADOPrStatService(TestCase):
         self.assertEqual(aggregateColumn(response, 'prs_merged'), 1)
         self.assertEqual(aggregateColumn(response, 'prs_submitted'), 4)
 
-    @patch('gitinsights.mods.managers.repo_insights_base.requests.get')
+    @patch('gitinsights.mods.managers.repo_insights_base.requests.Session.get')
     def test_repo_pr_comments(self, mock_get):
         mock_get.return_value.json.return_value = self.mockedPrThreadsResponse
         pullRequestId = "112"
@@ -95,7 +95,7 @@ class Test_ADOPrStatService(TestCase):
         self.assertEqual(len(response), 3)
         self.assertEqual(aggregateColumn(response, 'pr_comments'), 3)
 
-    @patch('gitinsights.mods.managers.repo_insights_base.requests.get')
+    @patch('gitinsights.mods.managers.repo_insights_base.requests.Session.get')
     def test_repo_pr_commits(self, mock_get):
         mock_get.side_effect = self.get_mocked_reponse_side_effects({'entitlements', 'commits'})
         # pylint: disable=protected-access
@@ -116,14 +116,15 @@ class Test_ADOPrStatService(TestCase):
         self.assertEqual(aggregateColumn(response, 'commit_change_count_additions'), 5)
         self.assertEqual(aggregateColumn(response, 'commit_change_count_edits'), 0)
 
-    @patch('gitinsights.mods.managers.repo_insights_base.requests.get')
-    @patch('gitinsights.mods.managers.repo_insights_base.requests.post')
+    @patch('gitinsights.mods.managers.repo_insights_base.requests.Session.get')
+    @patch('gitinsights.mods.managers.repo_insights_base.requests.Session.post')
     def test_project_workitems(self, mock_post, mock_get):
         mock_get.return_value.json.return_value = self.mockedWorkitemDetailsResponse
         mock_post.return_value.json.return_value = self.mockedWorkitemListResponse
+        pullRequestSubmitters = {'3411ebc1-d5aa-464f-9615-0b527bc66719': {20: 'Normal Paulk', 22: 'Mike Jones'}}
         # pylint: disable=protected-access
         client = AdoGetProjectWorkItemsClient("myorg", "dev.azure.com", "6.0", "", self.clientManager._reportableFieldDefaults)
-        response = client.getDeserializedDataset(repo="repo1", project=self.clientManager.project, teamId=self.clientManager.teamId)
+        response = client.getDeserializedDataset(repo="repo1", project=self.clientManager.project, teamId=self.clientManager.teamId, pullRequestSubmitters=pullRequestSubmitters)
 
         with self.assertRaises(ValueError):
             client.getDeserializedDataset(project=self.clientManager.project)
@@ -133,14 +134,15 @@ class Test_ADOPrStatService(TestCase):
         self.assertEqual(aggregateColumn(response, 'user_stories_assigned'), 2)
         self.assertEqual(aggregateColumn(response, 'user_stories_completed'), 1)
 
-    @patch('gitinsights.mods.managers.repo_insights_base.requests.get')
-    @patch('gitinsights.mods.managers.repo_insights_base.requests.post')
+    @patch('gitinsights.mods.managers.repo_insights_base.requests.Session.get')
+    @patch('gitinsights.mods.managers.repo_insights_base.requests.Session.post')
     def test_pr_submission_days(self, mock_post, mock_get):
         mock_get.return_value.json.return_value = self.mockedPrSubmissionFromWorkitemResponse
         mock_post.return_value.json.return_value = self.mockedWorkitemListResponse
+        pullRequestSubmitters = {'3411ebc1-d5aa-464f-9615-0b527bc66719': {22: 'Normal Paulk'}}
         # pylint: disable=protected-access
         client = AdoGetProjectWorkItemsClient("myorg", "dev.azure.com", "6.0", "", self.clientManager._reportableFieldDefaults)
-        response = client.getDeserializedDataset(repo="repo1", project=self.clientManager.project, teamId=self.clientManager.teamId)
+        response = client.getDeserializedDataset(repo="repo1", project=self.clientManager.project, teamId=self.clientManager.teamId, pullRequestSubmitters=pullRequestSubmitters)
 
         with self.assertRaises(ValueError):
             client.getDeserializedDataset(project=self.clientManager.project)
@@ -150,6 +152,7 @@ class Test_ADOPrStatService(TestCase):
         for record in response:
             if 'user_story_initial_pr_submission_days' in record and not math.isnan(record['user_story_initial_pr_submission_days']):
                 self.assertEqual(math.floor(record['user_story_initial_pr_submission_days']), 13)
+                self.assertEqual(record['contributor'], "Normal Paulk")
 
     @patch('gitinsights.mods.clients.ado.entitlements.AdoGetOrgEntitlementsClient.GetResponse')
     @patch('gitinsights.mods.clients.ado.pull_request.AdoPullRequestsClient.GetResponse')

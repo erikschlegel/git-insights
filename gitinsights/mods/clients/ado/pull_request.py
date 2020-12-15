@@ -24,6 +24,7 @@ class AdoPullRequestsClient(ApiClient):
         project = kwargs['project']
         uri_parameters: Dict[str, str] = {}
         uri_parameters['searchCriteria.status'] = 'all'
+        uri_parameters['$top'] = '1000'
 
         resourcePath = "{}/{}/_apis/git/repositories/{}/pullrequests".format(self.organization, project, repo)
         return self.DeserializeResponse(self.GetResponse(resourcePath, uri_parameters), repo)
@@ -42,7 +43,8 @@ class AdoPullRequestsClient(ApiClient):
                     'completion_date': parser.parse(pullrequest['closedDate']) if pullrequest['status'] == 'completed' else np.nan,
                     'pr_completion_days': RepoInsightsManager.dateStrDiffInDays(pullrequest['closedDate'], pullrequest['creationDate']) if pullrequest['status'] == 'completed' else np.nan,
                     'repo': repo,
-                    'pullRequestId': pullrequest['pullRequestId']
+                    'pullRequestId': pullrequest['pullRequestId'],
+                    'repoId': pullrequest['repository']['id']
                 },
                 }
 

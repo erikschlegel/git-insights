@@ -322,7 +322,7 @@
                 },
                 {
                     "rel": "ArtifactLink",
-                    "url": "vstfs:///Git/PullRequestId/52d898ff-e44e-4825-92ea--%2F2c04854b-c564-4891-bc11%2F311",
+                    "url": "vstfs:///Git/PullRequestId/52d898ff-e44e-4825-92ea-2913fb8467ff%2F3411ebc1-d5aa-464f-9615-0b527bc66719%2F20",
                     "attributes": {
                         "authorizedDate": "2020-11-17T21:40:28.863Z",
                         "id": 6193724,
@@ -346,7 +346,7 @@
                 },
                 {
                     "rel": "ArtifactLink",
-                    "url": "vstfs:///Git/Commit/52d898ff-e44e-4825-92ea--%2f2c04854b-c564-4891-bc11-22fa74f76d81",
+                    "url": "vstfs:///Git/Commit/52d898ff-e44e-4825-92ea-2913fb8467ff%2F3411ebc1-d5aa-464f-9615-0b527bc66719%2F20",
                     "attributes": {
                         "authorizedDate": "2020-12-05T02:36:55.333Z",
                         "id": 6296350,
@@ -358,7 +358,7 @@
                 },
                 {
                     "rel": "ArtifactLink",
-                    "url": "vstfs:///Git/PullRequestId/52d898ff-e44e-4825-92ea--%2F2c04854b-c564-4891%2F335",
+                    "url": "vstfs:///Git/PullRequestId/52d898ff-e44e-4825-92ea-2913fb8467ff%2F3411ebc1-d5aa-464f-9615-0b527bc66719%2F22",
                     "attributes": {
                         "authorizedDate": "2020-12-03T05:29:35.69Z",
                         "id": 6282894,
